@@ -1,0 +1,2 @@
+# pyplants
+ algebra zadatak
