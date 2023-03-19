@@ -38,9 +38,9 @@ def _get_html_content(url):
         return html_response.status_code
     else:
         #logger.DEBUG("Successful fetch from {url}, returned Status {st}", url=url, st=html_response.status_code)
-        return _soup_tropicopia_house_plants(html_content=html_response.content)
+        return _soup_tropicopia_house_plant(html_content=html_response.content)
 
-def _soup_tropicopia_house_plants(html_content):
+def _soup_tropicopia_house_plant(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     abstract = soup.find_all('p', attrs={'class' : 'ar12D'})
     plant = {}
@@ -61,6 +61,7 @@ def _soup_tropicopia_house_plants(html_content):
             plant[key] = value
         key_bool = not key_bool
     #logger.DEBUG("No more keys on this plant...")
+    plant.popitem() # remove comments
     # scrape plant image url
     image = ""
     for img in soup.findAll('img', alt=True):
