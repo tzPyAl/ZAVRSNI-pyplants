@@ -3,33 +3,25 @@ import requests
 #import logging as logger
 from bs4 import BeautifulSoup
 from pathlib import Path
+from datetime import datetime
 import json
 
 def scrapper(start=1, end=356): # todo: could make this dynamic, to loop until 404
     plants = []
     for id in range(start, end+1):
-        # build URL
         if id < 10 : id = "0" + str(id)
         feed_url = SCRAPPING_BASE_URL + str(id) + ".html"
-        #logger.DEBUG("Trying to scrape: {url}", url=str(feed_url))
         ask_for_scrape = _get_html_content(feed_url)
         if isinstance(ask_for_scrape, int):
             print("Can not access the URL, status", ask_for_scrape)
         else:
             plants.append(ask_for_scrape)
-    # save only at the end
-    file_name = _get_domain_from_url(SCRAPPING_BASE_URL) + ".json"
+    # save the data locally once the scrapping is done. will save empty file if fails
+    event_id = datetime.now().strftime("_%d.%m.%Y-%H:%M:%S")
+    file_name = _get_domain_from_url(SCRAPPING_BASE_URL) + event_id + ".json"
     Path("./scrapped_data").mkdir(parents=True, exist_ok=True)
-    try:
-        file_exists = open(f"./scrapped_data/{file_name}", "r")
-    except FileNotFoundError:
-        print("Saving data...")
-        file = open(f"./scrapped_data/{file_name}", "w")
-        json.dump(plants, file, indent=4)
-        file.close()
-    else:
-        file_exists.close()
-        print(f"File {file_name} already exists. Manually delete if you want to refresh data")
+    with open(f"./scrapped_data/{file_name}", "w") as new_file:
+        json.dump(plants, new_file, indent=4)
 
 def _get_domain_from_url(url=SCRAPPING_BASE_URL):
     prefix = url.index(".") + 1
@@ -46,29 +38,25 @@ def _get_html_content(url):
         return html_response.status_code
     else:
         #logger.DEBUG("Successful fetch from {url}, returned Status {st}", url=url, st=html_response.status_code)
-        return _soup_the_plant(html_content=html_response.content)
+        return _soup_tropicopia_house_plants(html_content=html_response.content)
 
-def _soup_the_plant(html_content):
+def _soup_tropicopia_house_plants(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     abstract = soup.find_all('p', attrs={'class' : 'ar12D'})
-
     plant = {}
-    # create a list from all avilable metadata
     key_bool = True
     key = ""
     value = ""
     for tag in abstract:
-        tmp = tag.getText().replace("\t", "").replace("\n", "")
-
+        cleared_tag = tag.getText().replace("\t", "").replace("\n", "")
         if key_bool: # ako je key na redu
-            key = tmp[:-2]
+            key = cleared_tag[:-2] # svaki key ima zadnja dva chara " :"
         else:
-            if tmp.find(":") > 0: # ako ima ':' onda je key
-                key = tmp[:-2] # spremi za iduci key, ali nemoj ga gledat. sto znaci da je iduci tmp moguci value
-                tmp = None
+            if cleared_tag.find(":") > 0: # provjeravamo da li postoji value. ako ima ':' onda je key, pogledaj predhodni komentar
+                key = cleared_tag[:-2] # spremi za iduci key, ali nemoj ga gledat. sto znaci da je iduci cleared_tag moguci value
+                cleared_tag = None
                 key_bool = not key_bool
-
-            value = tmp
+            value = cleared_tag
             #logger.DEBUG("Found key, writing {key}: {value} to plant", key=key, value=value)
             plant[key] = value
         key_bool = not key_bool
