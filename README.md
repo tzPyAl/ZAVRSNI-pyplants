@@ -23,3 +23,4 @@
 
 - write tests
 - create ci on gh actions
+- choose framework
