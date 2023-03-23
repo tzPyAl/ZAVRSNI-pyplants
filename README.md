@@ -14,6 +14,11 @@
 - user can hardcode location by city, or lon/lat so weather can be fetched correctly for his plants location
 - TODO: save hardcoded values to db
 
+## Weather
+
+- current weather and pollution from OpenWeatherMap API
+- data fetched by geolocation from IP (Endpoint data from ip) or by hardcoded city name
+
 ## Next step/s
 
 - write tests
