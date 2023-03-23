@@ -23,4 +23,3 @@
 
 - write tests
 - create ci on gh actions
-- get weather for endpoint location
