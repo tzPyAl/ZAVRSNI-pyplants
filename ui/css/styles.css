@@ -1,0 +1,70 @@
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+#title {
+  background-color: #f6fff8;
+}
+
+.container-fluid {
+  padding: 3% 10%;
+}
+
+.sync-btn {
+  position: relative;
+  left: 90%;
+  color: #a3c3b2;
+  border-color: #a3c3b2;
+}
+
+.sync-btn:hover {
+  background-color: #a3c3b2;
+  color: #f6fff8;
+  border-color: #f6fff8;
+}
+
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #6b9080;
+  margin-bottom: 5%;
+}
+
+.navbar {
+  background-color: #6b9080;
+}
+.navbar-brand {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.5rem;
+}
+
+.nav-item {
+  padding: 0 12px;
+}
+
+.nav-link {
+  font-size: 1rem;
+  color: #a3c3b2;
+}
+
+.plant-img {
+  clip-path: polygon(5% 5%, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
+  width: 60%;
+  max-width: 330px;
+}
+
+.plant-card {
+  background-color: #a3c3b2;
+  border-style: solid;
+  border-radius: 40px;
+  border-color: #6b9080;
+  border-width: 4px;
+  margin-bottom: 3%;
+}
+
+.plus-plant {
+  font-size: 10rem;
+  color: #6b9080;
+}
