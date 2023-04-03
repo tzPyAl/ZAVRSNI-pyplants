@@ -19,6 +19,12 @@
 - current weather and pollution from OpenWeatherMap API
 - data fetched by geolocation from IP (Endpoint data from ip) or by hardcoded city name
 
+## GUI
+
+- navbar, login, register
+  Next:
+- save user to db and auth
+
 ## Next step/s
 
 - write tests
