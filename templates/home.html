@@ -1,0 +1,11 @@
+{% extends "layout.html" %} {% block content %} 
+<div>
+    <button type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
+            class="fa-solid fa-rotate"></i> Sync</button></i>
+</div>
+{% for pot in pots %}
+<div class="plant-card">
+  <img class="plant-img col-md-12" src="{{ pot.img }}" />
+  {{ pot.name }} {{ pot.status }}
+</div>
+{% endfor %} {% endblock content %}
