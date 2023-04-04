@@ -22,11 +22,13 @@
 ## GUI
 
 - navbar, login, register
-  Next:
-- save user to db and auth
+- routes, auth
+
+## DB
+
+- User, Pots models
 
 ## Next step/s
 
 - write tests
 - create ci on gh actions
-- choose framework
