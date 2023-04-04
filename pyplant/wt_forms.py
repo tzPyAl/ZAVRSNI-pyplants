@@ -1,6 +1,7 @@
+from pyplant.db_models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 import email_validator
 
 class RegistrationForm(FlaskForm):
@@ -24,6 +25,16 @@ class RegistrationForm(FlaskForm):
                                     EqualTo("password")
                                     ])
     submit = SubmitField("Sign up")
+
+    def validate_email(self, email):
+        email = User.query.filter_by(email=email.data).first()
+        if email:
+            raise ValidationError("Email is taken. Please choose different one.")
+        
+    def validate_username(self, username):
+        username = User.query.filter_by(username=username.data).first()
+        if username:
+            raise ValidationError("Username is taken. Please choose different one.")
 
 class LoginForm(FlaskForm):
     email = StringField("Email",
