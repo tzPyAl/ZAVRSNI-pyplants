@@ -6,13 +6,11 @@
 - Using [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) we fetch all the meta + image url, and save inside the json file locally
 - access [tropicopia - plant](http://www.tropicopia.com/house-plant/detail.np/detail-01.html) to review the available metadata
 - support for history. each scrape saved in unique file
-- TODO: save scrapped data to db
 
 ## Endpoint data from ip
 
 - get local data from ip: city, country, longitude, latitude
 - user can hardcode location by city, or lon/lat so weather can be fetched correctly for his plants location
-- TODO: save hardcoded values to db
 
 ## Weather
 
@@ -21,12 +19,47 @@
 
 ## GUI
 
+- Flask, jinja2, FlaskForm
+- bootstrap, html, css
 - navbar, login, register
-  Next:
-- save user to db and auth
+
+### Pots
+
+- responsive home page
+
+### Pot
+
+- pot has name, image, and status
+- CRUD
+
+### Profil
+
+- auth, remember me
+- user has name, email, password and image
+- can edit data
+- if user changes the profile picture, old one is deleted
+- profile picture is formated to 125x125px
+
+## DB
+
+- MySQL with SQLAlchemy
+- User, Pots models
 
 ## Next step/s
 
+- pots hardcode statuses, and show status content and icon
+- unify the pots image
+- paginate the home page
+- user email and password reset
+- deploy, custom domain, https
+- embed the weather and ip/location data
+- clean css
+- del user
 - write tests
 - create ci on gh actions
-- choose framework
+
+## To define
+
+- local iot data
+- data visualization
+- embed the scrapped data

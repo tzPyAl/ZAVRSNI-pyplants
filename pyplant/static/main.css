@@ -10,7 +10,10 @@ h3,
 h4,
 h5,
 h6 {
-  color: #444444;
+  color: #6b9080;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bg-steel {
@@ -41,7 +44,7 @@ h6 {
   color: #444444;
 }
 
-a.article-title:hover {
+.article-title:hover {
   color: #428bca;
   text-decoration: none;
 }
@@ -102,11 +105,12 @@ body {
   border-color: #a3c3b2;
 }
 
-.sync-btn {
+.sync-btn,
+.del-btn {
   margin-top: -3%;
   margin-bottom: 3%;
   position: relative;
-  left: 90%;
+  left: 80%;
 }
 
 .sync-btn:hover,
@@ -144,8 +148,8 @@ h1 {
 
 .plant-img {
   clip-path: polygon(5% 5%, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
-  width: 60%;
-  max-width: 330px;
+  width: 100%;
+  max-width: 250px;
 }
 
 .plant-card {
@@ -160,4 +164,14 @@ h1 {
 .plus-plant {
   font-size: 10rem;
   color: #6b9080;
+}
+
+.pot-heading {
+  color: #6b9080;
+  text-align: left;
+}
+
+.pot-heading:hover {
+  text-decoration: none;
+  color: #333333;
 }
