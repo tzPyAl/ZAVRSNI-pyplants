@@ -1,30 +1,18 @@
 from pyplant import app, db, bcrypt
 from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm
 from pyplant.db_models import User, Pots
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 import secrets
 import os
 
 
-pots = [
-    {
-        'name': 'Potted plant 1',
-        'status': 'ok',
-        'img': "https://www.ikea.com/es/en/images/products/fejka-artificial-potted-plant-in-outdoor-monstera__0614197_pe686822_s5.jpg"
-    },
-    {
-        'name': 'Potted plant 2',
-        'status': 'no_water',
-        'img': "https://www.ikea.com/es/en/images/products/fejka-artificial-potted-plant-with-pot-in-outdoor-succulent__0614211_pe686835_s5.jpg?f=s"
-    }
-]
-
 @app.route("/")
 @app.route("/home")
 @login_required
 def home():
+    pots = Pots.query.filter_by(owner=current_user)
     return render_template('home.html', pots=pots)
 
 
@@ -58,10 +46,12 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
+
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("login"))
+
 
 def save_img(form_image, save_dir, size_x, size_y):
     random_hex = secrets.token_hex(12)
@@ -72,11 +62,14 @@ def save_img(form_image, save_dir, size_x, size_y):
     temp_image = Image.open(form_image)
     temp_image.thumbnail(output_size)
     temp_image.save(img_path)
-    # delete the old image
+    # delete the old user image
     current_img_name, _ = os.path.splitext(current_user.image_file)
-    if current_img_name != "default_profile":
+    if current_img_name != "default":
         old_img_path = os.path.join(app.root_path, save_dir, current_user.image_file)
-        os.remove(old_img_path)
+        try:
+            os.remove(old_img_path)
+        except FileNotFoundError:
+            pass # if i find to way to fetch the old pot image filename, i can delete it here
     return img_fn
 
 @app.route("/profile", methods=['GET', 'POST'])
@@ -98,6 +91,7 @@ def profile():
     image_file = url_for("static", filename="profile_img/" + current_user.image_file)
     return render_template('profil.html', title='Profile', image_file=image_file, form=form)
 
+
 @app.route("/pots/new", methods=['GET', 'POST'])
 @login_required
 def new_pot():
@@ -105,8 +99,53 @@ def new_pot():
     if form.validate_on_submit():
         if form.image.data:
             pot_img = save_img(form_image=form.image.data, save_dir="static/pot_img", size_x=375, size_y=375)
-            Pots.pot_image = pot_img
-            db.session.commit()
+            pot = Pots(name=form.name.data, pot_image=pot_img, owner=current_user)
+        else:
+            pot = Pots(name=form.name.data, owner=current_user)
+        db.session.add(pot)
+        db.session.commit()
         flash('New pot has been created.', 'success')
         return redirect(url_for("home"))
     return render_template("create_pot.html", title="New pot", form=form)
+
+
+@app.route("/pots/<int:pot_id>")
+@login_required
+def pot(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    if pot.owner != current_user:
+        abort(403)
+    return render_template("pot.html", title=pot.name, pot=pot)
+
+
+@app.route("/pots/<int:pot_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_pot(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    if pot.owner != current_user:
+        abort(403)
+    form = PotForm()
+    if form.validate_on_submit():
+        if form.image.data:
+            pot.pot_image = save_img(form_image=form.image.data, save_dir="static/pot_img", size_x=375, size_y=375)
+        else:
+            pot.pot_image = pot.pot_image
+        pot.name = form.name.data
+        db.session.commit()
+        flash('Pot has been updated.', 'success')
+        return redirect(url_for("pot", pot_id=pot.id))
+    elif request.method == "GET":
+        form.name.data = pot.name
+        form.image.data = pot.pot_image
+    return render_template("create_pot.html", title="Update pot", form=form)
+
+@app.route("/pots/<int:pot_id>/delete", methods=['POST'])
+@login_required
+def delete_pot(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    if pot.owner != current_user:
+        abort(403)
+    db.session.delete(pot)
+    db.session.commit()
+    flash('Pot has been deleted.', 'success')
+    return redirect(url_for("home"))

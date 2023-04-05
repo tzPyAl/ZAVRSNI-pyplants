@@ -1,11 +1,34 @@
-{% extends "layout.html" %} {% block content %} 
+{% extends "layout.html" %} {% block content %}
 <div>
-    <button type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
-            class="fa-solid fa-rotate"></i> Sync</button></i>
+  <a href="{{ url_for('new_pot') }}" type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
+      class="fa-solid fa-glass-water-droplet"></i> Add Pot</a></i>
+  <a href="{{ url_for('home') }}" type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
+      class="fa-solid fa-rotate"></i> Sync</a></i>
 </div>
-{% for pot in pots %}
-<div class="plant-card">
-  <img class="plant-img col-md-12" src="{{ pot.img }}" />
-  {{ pot.name }} {{ pot.status }}
-</div>
-{% endfor %} {% endblock content %}
+{% if pots.first() %}
+<section class="pots-holder">
+  <div class="container">
+    <div class="row">
+
+      {% for pot in pots %}
+      <div class="col-md-6">
+        <section class="map-cont plant-card">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <img src="static/pot_img/{{ pot.pot_image }}" alt="" class="rounded mx-auto d-block map img-fluid plant-img" />
+              </div>
+              <div class="col-md-6 mt-4">
+                <h3><a class="pot-heading" href="{{ url_for('pot', pot_id=pot.id) }}">{{ pot.name }} </a></h3>
+                <p>{{ pot.status }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% else %} <h1>no</h1>{% endif %}
+{% endblock content %}

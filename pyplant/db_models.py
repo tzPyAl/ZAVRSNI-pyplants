@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default="default_profile.png")
+    image_file = db.Column(db.String(20), nullable=False, default="default.png")
     pots = db.relationship("Pots", backref="owner", lazy=True) # lazy - load dana in one go
 
     def __repr__(self): # how our Object is printed, when we printed it out
@@ -20,13 +20,13 @@ class User(db.Model, UserMixin):
 class Pots(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True, nullable=False)
-    pot_image = db.Column(db.String(20), default="default_pot.jpeg")
+    pot_image = db.Column(db.String(20), default="default.jpeg")
     data_created = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    status = db.Column(db.Text)
+    status = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     # add plant id
 
     def __repr__(self): # how our Object is printed, when we printed it out
-        return f"User('{self.name}', '{self.status}', '{self.data_created}')"
+        return f"Pots('{self.name}', '{self.pot_image}', '{self.status}', '{self.user_id}', '{self.data_created}')"
     
 # clear db -> db.drop_all() db.create_all()
