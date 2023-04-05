@@ -36,7 +36,7 @@
 
 - auth, remember me
 - user has name, email, password and image
-- can edit data
+- CRUD
 - if user changes the profile picture, old one is deleted
 - profile picture is formated to 125x125px
 
@@ -54,7 +54,6 @@
 - deploy, custom domain, https
 - embed the weather and ip/location data
 - clean css
-- del user
 - write tests
 - create ci on gh actions
 

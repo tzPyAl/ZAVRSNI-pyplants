@@ -139,6 +139,7 @@ def update_pot(pot_id):
         form.image.data = pot.pot_image
     return render_template("create_pot.html", title="Update pot", form=form)
 
+
 @app.route("/pots/<int:pot_id>/delete", methods=['POST'])
 @login_required
 def delete_pot(pot_id):
@@ -149,3 +150,12 @@ def delete_pot(pot_id):
     db.session.commit()
     flash('Pot has been deleted.', 'success')
     return redirect(url_for("home"))
+
+
+@app.route("/profile/delete", methods=['POST'])
+@login_required
+def delete_profile():
+    User.query.filter_by(id=current_user.id).delete()
+    db.session.commit()
+    flash('User has been deleted.', 'success')
+    return redirect(url_for("login"))

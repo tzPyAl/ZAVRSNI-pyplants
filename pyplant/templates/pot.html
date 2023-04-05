@@ -2,7 +2,7 @@
 <div>
     <a href="{{ url_for('update_pot', pot_id=pot.id) }}" type="button"
         class="btn btn-outline-secondary btn-lg sync-btn"><i class="fa-solid fa-pen"></i> Edit</a></i>
-    <button href="{{ url_for('home') }}" type="button" class="btn btn-lg del-btn btn-danger" data-toggle="modal"
+    <button type="button" class="btn btn-lg del-btn btn-danger" data-toggle="modal"
         data-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button></i>
 </div>
 <img src="static/pot_img/{{ pot.pot_image }}" alt="" class="" />
