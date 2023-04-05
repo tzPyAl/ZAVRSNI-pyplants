@@ -21,8 +21,8 @@
 
 ## GUI
 
-- navbar, login, register
-- routes, auth
+- navbar, login, register, profile
+- routes, auth, image upload
 
 ## DB
 

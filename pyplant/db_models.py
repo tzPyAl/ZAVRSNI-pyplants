@@ -20,10 +20,11 @@ class User(db.Model, UserMixin):
 class Pots(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True, nullable=False)
-    pot_image = db.Column(db.String(60), default="https://www.ikea.com/es/en/images/products/fejka-artificial-potted-plant-in-outdoor-monstera__0614197_pe686822_s5.jpg")
+    pot_image = db.Column(db.String(20), default="default_pot.jpeg")
     data_created = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     status = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    # add plant id
 
     def __repr__(self): # how our Object is printed, when we printed it out
         return f"User('{self.name}', '{self.status}', '{self.data_created}')"

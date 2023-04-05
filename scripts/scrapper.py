@@ -69,5 +69,5 @@ def _soup_tropicopia_house_plant(html_content):
     plant["image_url"] = "http://www.tropicopia.com/house-plant/" + image["src"][3:]
     return plant
 
-
-scrapper()
+if __name__ == "__main__":
+    scrapper()

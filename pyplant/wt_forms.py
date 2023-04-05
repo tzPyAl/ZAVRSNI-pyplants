@@ -1,4 +1,4 @@
-from pyplant.db_models import User
+from pyplant.db_models import User, Pots
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
@@ -76,3 +76,14 @@ class UpdateProfileForm(FlaskForm):
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
+            
+class PotForm(FlaskForm):
+    name = StringField("Pot name", validators=[DataRequired()])
+    image = FileField("Upload pot picture", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    submit = SubmitField("Create")
+
+    def validate_pot_name(self, pot_name):
+        if pot_name.data != current_user.username:
+            name = Pots.query.filter_by(pot_name=pot_name.data).first()
+            if name:
+                raise ValidationError('That name is taken. Please choose a different one.')
