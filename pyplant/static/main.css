@@ -28,7 +28,7 @@ h6 {
   color: var(--green);
 }
 
-.site-header .navbar-nav  {
+.site-header .navbar-nav {
   color: var(--green);
 }
 
@@ -115,7 +115,7 @@ h1 {
   background-color: var(--gray);
   border-style: solid;
   border-radius: 40px;
-  border-color: var(--green)
+  border-color: var(--green);
   border-width: 4px;
   margin-bottom: 3%;
   min-height: 300px;
