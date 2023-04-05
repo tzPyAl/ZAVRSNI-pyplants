@@ -1,7 +1,15 @@
+:root {
+  --dark: #353535;
+  --dark-green: #284b63;
+  --green: #3c6e71;
+  --white: #ffffff;
+  --gray: #e3e8e3;
+}
+
 body {
-  background: #fafafa;
-  color: #333333;
+  background: ver(--white);
   margin-top: 5rem;
+  font-family: "Montserrat", sans-serif;
 }
 
 h1,
@@ -10,70 +18,26 @@ h3,
 h4,
 h5,
 h6 {
-  color: #6b9080;
+  color: var(--dark-green);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.bg-steel {
-  background-color: #5f788a;
+.nav-link:hover {
+  color: var(--green);
+}
+
+.site-header .navbar-nav  {
+  color: var(--green);
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
-}
-
-.site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+  color: var(--gray);
 }
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
-}
-
-.content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
-}
-
-.article-title {
-  color: #444444;
-}
-
-.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3;
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
 }
 
 .account-img {
@@ -87,12 +51,8 @@ h6 {
   font-size: 2.5rem;
 }
 
-body {
-  font-family: "Montserrat", sans-serif;
-}
-
 #title {
-  background-color: #f6fff8;
+  background-color: var(--white);
 }
 
 .container-fluid {
@@ -101,8 +61,8 @@ body {
 
 .sync-btn,
 .submit-btn {
-  color: #a3c3b2;
-  border-color: #a3c3b2;
+  color: var(--green);
+  border-color: var(--green);
 }
 
 .sync-btn,
@@ -115,23 +75,22 @@ body {
 
 .sync-btn:hover,
 .submit-btn:hover {
-  background-color: #a3c3b2;
-  color: #f6fff8;
-  border-color: #f6fff8;
+  background-color: var(--green);
+  color: var(--white);
+  border-color: var(--white);
 }
 
 h1 {
-  font-family: "Montserrat", sans-serif;
   font-size: 2rem;
   line-height: 1.5;
   font-weight: 700;
-  color: #6b9080;
   margin-bottom: 5%;
 }
 
 .navbar {
-  background-color: #6b9080;
+  background-color: var(--dark-green);
 }
+
 .navbar-brand {
   font-family: "Ubuntu", sans-serif;
   font-size: 1.5rem;
@@ -143,7 +102,7 @@ h1 {
 
 .nav-link {
   font-size: 1rem;
-  color: #a3c3b2;
+  color: var(--gray);
 }
 
 .plant-img {
@@ -153,25 +112,27 @@ h1 {
 }
 
 .plant-card {
-  background-color: #a3c3b2;
+  background-color: var(--gray);
   border-style: solid;
   border-radius: 40px;
-  border-color: #6b9080;
+  border-color: var(--green)
   border-width: 4px;
   margin-bottom: 3%;
-}
-
-.plus-plant {
-  font-size: 10rem;
-  color: #6b9080;
+  min-height: 300px;
 }
 
 .pot-heading {
-  color: #6b9080;
+  color: var(--green);
   text-align: left;
 }
 
 .pot-heading:hover {
   text-decoration: none;
-  color: #333333;
+  color: var(--dark-green);
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-card-size {
+    min-height: 600px;
+  }
 }

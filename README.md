@@ -48,12 +48,10 @@
 ## Next step/s
 
 - pots hardcode statuses, and show status content and icon
-- unify the pots image
 - paginate the home page
 - user email and password reset
 - deploy, custom domain, https
 - embed the weather and ip/location data
-- clean css
 - write tests
 - create ci on gh actions
 
