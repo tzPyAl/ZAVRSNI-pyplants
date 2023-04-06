@@ -131,6 +131,28 @@ h1 {
   color: var(--dark-green);
 }
 
+.nav-tabs .nav-link {
+  color: var(--green);
+  border: 0;
+  border-bottom: 1px solid var(--green);
+}
+
+.nav-tabs .nav-link:hover {
+  border: 0;
+  border-bottom: 1px solid var(--gray);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--dark-green);
+  border: 0;
+  border-radius: 0;
+  border-bottom: 2px solid var(--dark-green);
+}
+
+.tab-pane {
+  margin-top: 3%;
+}
+
 @media screen and (max-width: 768px) {
   .mobile-card-size {
     min-height: 600px;

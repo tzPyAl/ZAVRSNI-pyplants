@@ -1,9 +1,11 @@
 from pyplant import app, db, bcrypt
 from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm
 from pyplant.db_models import User, Pots
+from scripts.weather import get_weather
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
+from json2html import *
 import secrets
 import os
 
@@ -108,6 +110,11 @@ def new_pot():
         return redirect(url_for("home"))
     return render_template("create_pot.html", title="New pot", form=form)
 
+def save_to_html(name, content):
+    html_file = os.path.join('pyplant/templates', name + '.html')
+    print(html_file)
+    with open(html_file, 'w+') as file:
+        file.write(content)
 
 @app.route("/pots/<int:pot_id>")
 @login_required
@@ -115,6 +122,12 @@ def pot(pot_id):
     pot = Pots.query.get_or_404(pot_id)
     if pot.owner != current_user:
         abort(403)
+    _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
+    # create a html from json, and save in html file
+    weather = '{% block weather %}' + json2html.convert(json=_weather) + '{% endblock %}'
+    pollution = '{% block pollution %}' + json2html.convert(json=_pollution) + '{% endblock %}'
+    save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
+    save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
     return render_template("pot.html", title=pot.name, pot=pot)
 
 

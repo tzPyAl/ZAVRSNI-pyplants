@@ -11,23 +11,16 @@ WEATHER_BASE_URL = os.getenv('WEATHER_BASE_URL')
 WEATHER_POLLUTION_API = os.getenv('WEATHER_POLLUTION_API')
 WEATHER_GEOCODING_API = os.getenv('WEATHER_GEOCODING_API')
 
-def get_weather(city=None):
-    if city == None:
-        endpoint = Endpoint()
-    else:
-        geo_location = _get_location_from_city(city=city)
-        if geo_location:
-            endpoint.city = geo_location[0]
-            endpoint.country = geo_location[1]
-            endpoint.lat = geo_location[2]
-            endpoint.lon = geo_location[3]
+def get_weather(lat, lon):
     params = {
-        "lat": endpoint.lat, 
-        "lon": endpoint.lon, 
+        "lat": lat, 
+        "lon": lon, 
+        "units": "metric",
         "appid": WEATHER_API_KEY, 
         }
-    current_weather_response = requests.get(WEATHER_BASE_URL, params=params)
-    pollution_response = requests.get(WEATHER_POLLUTION_API, params=params)
+    current_weather_response = requests.get(WEATHER_BASE_URL, params=params).json()
+    pollution_response = requests.get(WEATHER_POLLUTION_API, params=params).json()
+    return current_weather_response, pollution_response
 
 def _get_location_from_city(city):
     params = {

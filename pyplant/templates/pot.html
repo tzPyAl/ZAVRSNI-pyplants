@@ -2,8 +2,8 @@
 <div>
     <a href="{{ url_for('update_pot', pot_id=pot.id) }}" type="button"
         class="btn btn-outline-secondary btn-lg sync-btn"><i class="fa-solid fa-pen"></i> Edit</a></i>
-    <button type="button" class="btn btn-lg del-btn btn-danger" data-toggle="modal"
-        data-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button></i>
+    <button type="button" class="btn btn-lg del-btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i
+            class="fa-solid fa-trash"></i> Delete</button></i>
 </div>
 <img src="static/pot_img/{{ pot.pot_image }}" alt="" class="" />
 <section class="map-cont">
@@ -11,8 +11,35 @@
         <div class="row">
             <div class="col-md-6">
                 <h3 class="pot-heading mt-4">{{ pot.name }} </h3>
-                <p>{{ pot.status }}</p>
-                <p>{{ pot.location }}</p>
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">Basic</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="weather-tab" data-toggle="tab" href="#weather" role="tab"
+                            aria-controls="weather" aria-selected="false">Weather</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pollution-tab" data-toggle="tab" href="#pollution" role="tab"
+                            aria-controls="pollution" aria-selected="false">Pollution</a>
+                    </li>
+                </ul>
+                <!-- Tabs content -->
+                <div class="tab-content" id="tabs-content">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home">
+                        <p class="mt-4">STATUS: {{ pot.status }}</p>
+                        <p class="pot-report">LOCATION: {{ pot.location }}</p>
+                    </div>
+                    <div class="tab-pane fade" id="weather" role="tabpanel" aria-labelledby="weather">
+                        {% include "weather.html" %}
+                    </div>
+                    <div class="tab-pane fade" id="pollution" role="tabpanel" aria-labelledby="pollution">
+                        {% include "pollution.html" %}
+                    </div>
+                </div>
+                <!-- Tabs content end -->
             </div>
             <div class="col-md-6">
                 <img class="plant-img"" src=" {{ url_for('static', filename='pot_img/' + pot.pot_image) }}" />
