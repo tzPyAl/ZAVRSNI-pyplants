@@ -1,19 +1,13 @@
 import requests
 
 class Endpoint:
-    def __init__(self, city=None, lon=None, lat=None):
+    def __init__(self):
         if self._get_location_from_ip() == None:
             self.ip = "0.0.0.0"
             self.city = "Unknown"
             self.country = "Unknown"
             self.lon = "Unknown"
             self.lat = "Unknown"
-        # hardcode lon/lat and/or city if provided by user
-        if lon != None and lat != None:
-            self.lon = lon
-            self.lat = lat
-        if city != None:
-            self.city = city
 
     def _get_ip(self):
         try:

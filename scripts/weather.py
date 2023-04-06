@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import requests
-from endpoint_data import Endpoint
+from .endpoint_data import Endpoint
 import json
 
 load_dotenv()
@@ -14,16 +14,16 @@ WEATHER_GEOCODING_API = os.getenv('WEATHER_GEOCODING_API')
 def get_weather(city=None):
     if city == None:
         endpoint = Endpoint()
-        lat = endpoint.lat
-        lon = endpoint.lon
     else:
         geo_location = _get_location_from_city(city=city)
-        lat = geo_location[0]
-        lon = geo_location[1]
-
+        if geo_location:
+            endpoint.city = geo_location[0]
+            endpoint.country = geo_location[1]
+            endpoint.lat = geo_location[2]
+            endpoint.lon = geo_location[3]
     params = {
-        "lat": lat, 
-        "lon": lon, 
+        "lat": endpoint.lat, 
+        "lon": endpoint.lon, 
         "appid": WEATHER_API_KEY, 
         }
     current_weather_response = requests.get(WEATHER_BASE_URL, params=params)
@@ -37,5 +37,7 @@ def _get_location_from_city(city):
     }
     req = requests.get(WEATHER_GEOCODING_API, params=params)
     req_json = req.json()
-    print(f"Pronađeno {req.json()}")
-    return [req_json[0]["lat"], req_json[0]["lon"]] # we trust first will be correct; limit=1
+    if req_json:
+        return [req_json[0]["name"], req_json[0]["country"], req_json[0]["lat"], req_json[0]["lon"]] # we trust first 
+    else:
+        return False

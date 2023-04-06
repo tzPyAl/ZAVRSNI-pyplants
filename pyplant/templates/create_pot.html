@@ -16,6 +16,17 @@
         endif %}
       </div>
       <div class="form-group">
+        {{ form.location.label(class="form-control-label") }} found: <a style="color: royalblue;">{{form.location.data}}</a> {% if form.location.errors
+        %} {{ form.location(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+          {% for error in form.location.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.location(class="form-control form-control-lg") }} {%
+        endif %}
+      </div>
+      <div class="form-group">
         {{ form.image.label() }} {{ form.image(class="form-control-file") }} {%
         if form.image.errors %} {% for error in form.image.errors %}
         <span class="text-danger">{{ error }}</span></div></br>

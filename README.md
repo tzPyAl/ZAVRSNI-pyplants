@@ -29,7 +29,10 @@
 
 ### Pot 🚧
 
-- pot has name, image, and status
+- pot has name, image, status, location, lon, lat
+- location is proposed from the ip.address, but can be manually entered
+- we use API -explained in weather- to find the city
+- when we confirm the city, we extract lon/lat for weather data
 - CRUD
 
 ### Profil 🚧
@@ -43,11 +46,12 @@
 ## DB ✅
 
 - MySQL with SQLAlchemy
-- User, Pots models
+- hashed password with secrets
+- User model (id, username, email, password, image_file)
+- Pots models (id, name, pot_image, date_created, status, location, lon, lat, user_id)
 
 ## Next step/s 🚧 🚧 🚧
 
-- pots hardcode statuses, and show status content and icon
 - paginate the home page
 - user email and password reset
 - deploy, custom domain, https
@@ -60,3 +64,4 @@
 - local iot data
 - data visualization
 - embed the scrapped data
+- pots hardcode statuses, and show status content and icon :!: this should be redefined.

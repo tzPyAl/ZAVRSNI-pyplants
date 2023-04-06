@@ -99,12 +99,12 @@ def new_pot():
     if form.validate_on_submit():
         if form.image.data:
             pot_img = save_img(form_image=form.image.data, save_dir="static/pot_img", size_x=375, size_y=375)
-            pot = Pots(name=form.name.data, pot_image=pot_img, owner=current_user)
+            pot = Pots(name=form.name.data, location=form.location.data, lon=form.lon.data, lat=form.lat.data, pot_image=pot_img, owner=current_user)
         else:
-            pot = Pots(name=form.name.data, owner=current_user)
+            pot = Pots(name=form.name.data, location=form.location.data, lon=form.lon.data, lat=form.lat.data, owner=current_user)
         db.session.add(pot)
         db.session.commit()
-        flash('New pot has been created.', 'success')
+        flash(f'New pot has been created. Found location {form.location.data}', 'success')
         return redirect(url_for("home"))
     return render_template("create_pot.html", title="New pot", form=form)
 
@@ -131,11 +131,15 @@ def update_pot(pot_id):
         else:
             pot.pot_image = pot.pot_image
         pot.name = form.name.data
+        pot.location = form.location.data
+        pot.lat = form.lat.data
+        pot.lon = form.lon.data
         db.session.commit()
         flash('Pot has been updated.', 'success')
         return redirect(url_for("pot", pot_id=pot.id))
     elif request.method == "GET":
         form.name.data = pot.name
+        form.location.data = pot.location
         form.image.data = pot.pot_image
     return render_template("create_pot.html", title="Update pot", form=form)
 
