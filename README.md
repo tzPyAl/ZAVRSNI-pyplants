@@ -9,23 +9,23 @@
 
 ## Endpoint data from ip ✅
 
-- get local data from ip: city, country, longitude, latitude
+- get local data from ip: city, country, longitude, latitude using `ipapi`
 - user can hardcode location by city, or lon/lat so weather can be fetched correctly for his plants location
 
 ## Weather ✅
 
-- current weather and pollution from OpenWeatherMap API
+- current weather and pollution from `OpenWeatherMap API`
 - data fetched by geolocation from IP (Endpoint data from ip) or by hardcoded city name
 
 ## GUI 🚧
 
-- Flask, jinja2, FlaskForm
-- bootstrap, html, css
-- navbar, login, register
+- `Flask`, `jinja2`, `FlaskForm`, `Pillow`, `json2html`
+- `bootstrap`, `html`, `css`
+- navbar, layout, login, register
 
 ### Pots 🚧
 
-- responsive home page
+- responsive home page with add pot option
 
 ### Pot 🚧
 
@@ -33,6 +33,7 @@
 - location is proposed from the ip.address, but can be manually entered
 - we use API -explained in weather- to find the city
 - when we confirm the city, we extract lon/lat for weather data
+- pot now has tabs: basic info, weather and pollution, which consumes fetched weather data
 - CRUD
 
 ### Profil 🚧
@@ -45,8 +46,8 @@
 
 ## DB ✅
 
-- MySQL with SQLAlchemy
-- hashed password with secrets
+- `SQLAlchemy`
+- hashed password with `secrets`
 - User model (id, username, email, password, image_file)
 - Pots models (id, name, pot_image, date_created, status, location, lon, lat, user_id)
 
@@ -54,8 +55,8 @@
 
 - paginate the home page
 - user email and password reset
+- embed the scrapped data
 - deploy, custom domain, https
-- embed the weather and ip/location data
 - write tests
 - create ci on gh actions
 
@@ -63,5 +64,4 @@
 
 - local iot data
 - data visualization
-- embed the scrapped data
 - pots hardcode statuses, and show status content and icon :!: this should be redefined.
