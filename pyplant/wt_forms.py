@@ -107,3 +107,10 @@ class PotForm(FlaskForm):
         global returned_location
         lon.data = returned_location[3]
 
+class SearchForm(FlaskForm):
+    search = StringField("Enter plant name. Search by keyword", validators=[DataRequired()])
+    submit = SubmitField("Search")
+
+    def validate_search(self, search):
+        if not search:
+            raise ValidationError(f'Enter the desired keyword.')

@@ -1,5 +1,5 @@
 from pyplant import app, db, bcrypt
-from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm
+from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm, SearchForm
 from pyplant.db_models import User, Pots
 from scripts.weather import get_weather
 from flask import render_template, url_for, flash, redirect, request, abort
@@ -8,6 +8,9 @@ from PIL import Image
 from json2html import *
 import secrets
 import os
+import json
+import glob
+
 
 
 @app.route("/")
@@ -176,3 +179,21 @@ def delete_profile():
     db.session.commit()
     flash('User has been deleted.', 'success')
     return redirect(url_for("login"))
+
+@app.route("/plants", methods=['GET', 'POST'])
+@login_required
+def plants():
+    form = SearchForm()
+    if form.validate_on_submit():
+        list_of_scrapped = glob.glob('./scrapped_data/*.json')
+        latest_scrap = max(list_of_scrapped, key=os.path.getctime) 
+        with open(latest_scrap) as jsondata:
+            data = json.load(jsondata)
+        output_dict = [x for x in data if form.search.data.lower() in x['common_name']]
+        output_json = json.dumps(output_dict)
+        if output_json == '[]':
+            flash('No results. Try again', 'danger')
+        else:
+            flash(f'Found {form.search.data}', 'info')
+            return render_template("plants.html", title="Plants database", form=form, output_json=output_json)
+    return render_template("plants.html", title="Plants database", form=form)

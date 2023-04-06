@@ -6,7 +6,9 @@ from pathlib import Path
 from datetime import datetime
 import json
 
-def scrapper(start=1, end=356): # todo: could make this dynamic, to loop until 404
+id = 0
+
+def scrapper(start=1, end=2): # todo: could make this dynamic, to loop until 404
     plants = []
     for id in range(start, end+1):
         if id < 10 : id = "0" + str(id)
@@ -41,24 +43,27 @@ def _get_html_content(url):
         return _soup_tropicopia_house_plant(html_content=html_response.content)
 
 def _soup_tropicopia_house_plant(html_content):
+    global id
     soup = BeautifulSoup(html_content, "html.parser")
     abstract = soup.find_all('p', attrs={'class' : 'ar12D'})
-    plant = {}
+    plant = {'id':id}
+    id += 1
     key_bool = True
     key = ""
     value = ""
     for tag in abstract:
         cleared_tag = tag.getText().replace("\t", "").replace("\n", "")
         if key_bool: # ako je key na redu
-            key = cleared_tag[:-2] # svaki key ima zadnja dva chara " :"
+            key = cleared_tag[:-2].replace(" ","_") # svaki key ima zadnja dva chara " :"
         else:
             if cleared_tag.find(":") > 0: # provjeravamo da li postoji value. ako ima ':' onda je key, pogledaj predhodni komentar
-                key = cleared_tag[:-2] # spremi za iduci key, ali nemoj ga gledat. sto znaci da je iduci cleared_tag moguci value
+                key = cleared_tag[:-2].replace(" ","_") # spremi za iduci key, ali nemoj ga gledat. sto znaci da je iduci cleared_tag moguci value
                 cleared_tag = None
                 key_bool = not key_bool
             value = cleared_tag
             #logger.DEBUG("Found key, writing {key}: {value} to plant", key=key, value=value)
-            plant[key] = value
+            value = value.lower() if value else value
+            plant[key.lower()] = value
         key_bool = not key_bool
     #logger.DEBUG("No more keys on this plant...")
     plant.popitem() # remove comments

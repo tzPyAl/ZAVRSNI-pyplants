@@ -18,6 +18,10 @@
                             aria-controls="home" aria-selected="true">Basic</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="plant-tab" data-toggle="tab" href="#plant" role="tab"
+                            aria-controls="plant" aria-selected="false">Plant</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="weather-tab" data-toggle="tab" href="#weather" role="tab"
                             aria-controls="weather" aria-selected="false">Weather</a>
                     </li>
@@ -31,6 +35,9 @@
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home">
                         <p class="mt-4">STATUS: {{ pot.status }}</p>
                         <p class="pot-report">LOCATION: {{ pot.location }}</p>
+                    </div>
+                    <div class="tab-pane fade" id="plant" role="tabpanel" aria-labelledby="plant">
+                        <p>plant holder</p>
                     </div>
                     <div class="tab-pane fade" id="weather" role="tabpanel" aria-labelledby="weather">
                         {% include "weather.html" %}

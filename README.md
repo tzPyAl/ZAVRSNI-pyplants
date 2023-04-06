@@ -36,6 +36,12 @@
 - pot now has tabs: basic info, weather and pollution, which consumes fetched weather data
 - CRUD
 
+### Plants
+
+- search scrapped plants db
+- search is posible by keyword in common_name key
+- not key sensitive
+
 ### Profil 🚧
 
 - auth, remember me
@@ -55,7 +61,7 @@
 
 - paginate the home page
 - user email and password reset
-- embed the scrapped data
+- ~~embed the scrapped data~~ prettify the scrapped data. take id and leave it in pot to connect plant and pot
 - deploy, custom domain, https
 - write tests
 - create ci on gh actions
