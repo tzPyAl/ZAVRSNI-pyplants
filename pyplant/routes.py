@@ -130,8 +130,8 @@ def pot(pot_id):
         abort(403)
     _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
     # create a html from json, and save in html file
-    weather = '{% block weather %}' + json2html.convert(json=_weather) + '{% endblock %}'
-    pollution = '{% block pollution %}' + json2html.convert(json=_pollution) + '{% endblock %}'
+    weather = '{% block weather %}<div class="styled-table">' + json2html.convert(json=_weather) + '</div>{% endblock %}'
+    pollution = '{% block pollution %}<div class="styled-table">' + json2html.convert(json=_pollution) + '</div>{% endblock %}'
     save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
     save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
     return render_template("pot.html", title=pot.name, pot=pot)

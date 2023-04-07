@@ -157,6 +157,36 @@ h1 {
   margin-top: 3%;
 }
 
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+}
+
+.styled-table thead tr {
+  background-color: var(--green);
+  color: var(--white);
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody td:nth-of-type(even) {
+  background-color: var(--white);
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid var(--green);
+}
+
 @media screen and (max-width: 768px) {
   .mobile-card-size {
     min-height: 600px;
