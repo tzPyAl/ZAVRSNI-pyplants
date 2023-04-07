@@ -114,3 +114,22 @@ class SearchForm(FlaskForm):
     def validate_search(self, search):
         if not search:
             raise ValidationError(f'Enter the desired keyword.')
+        
+class RequestResetForm(FlaskForm):
+    email = StringField("Email",
+                        validators=[
+                            DataRequired(),
+                            Email()
+                        ])
+    submit = SubmitField("Send reset code to email")
+
+    # handling verification in routes. don't want to show if the email is not in db
+    # def validate_email(self, email):
+    #     email = User.query.filter_by(email=email.data).first()
+    #     if email is None:
+    #         raise ValidationError('Email is not in database') 
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField("Password", validators=[DataRequired()])
+    confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password")])
+    submit = SubmitField("Reset Password")

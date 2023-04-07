@@ -1,6 +1,9 @@
-from pyplant import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
+from itsdangerous import URLSafeTimedSerializer as TimedSerializer
+from pyplant import db, login_manager, app
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -13,6 +16,15 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default="default.png")
     pots = db.relationship("Pots", backref="owner", lazy=True) # lazy - load dana in one go
+
+    def get_reset_token(self):
+        s = TimedSerializer(app.config['SECRET_KEY'], 'confirmation')
+        return s.dumps({'user_id': self.id})
+    
+    def verify_reset_token(self, token, max_age=1800):
+        s = TimedSerializer(app.config['SECRET_KEY'], 'confirmation')
+        user_id = s.loads(token, max_age=max_age)
+        return self.id if user_id == self.id else None
 
     def __repr__(self): # how our Object is printed, when we printed it out
         return f"User('{self.id}', '{self.username}', '{self.email}')"

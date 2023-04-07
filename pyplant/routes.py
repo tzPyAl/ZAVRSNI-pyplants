@@ -1,16 +1,16 @@
-from pyplant import app, db, bcrypt
-from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm, SearchForm
+from pyplant import app, db, bcrypt, mail
+from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm, SearchForm, RequestResetForm, ResetPasswordForm
 from pyplant.db_models import User, Pots
 from scripts.weather import get_weather
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 from PIL import Image
 from json2html import *
 import secrets
 import os
 import json
 import glob
-
 
 
 @app.route("/")
@@ -78,6 +78,7 @@ def save_img(form_image, save_dir, size_x, size_y):
             pass # if i find to way to fetch the old pot image filename, i can delete it here
     return img_fn
 
+
 @app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -119,6 +120,7 @@ def save_to_html(name, content):
     print(html_file)
     with open(html_file, 'w+') as file:
         file.write(content)
+
 
 @app.route("/pots/<int:pot_id>")
 @login_required
@@ -181,6 +183,7 @@ def delete_profile():
     flash('User has been deleted.', 'success')
     return redirect(url_for("login"))
 
+
 @app.route("/plants", methods=['GET', 'POST'])
 @login_required
 def plants():
@@ -198,3 +201,46 @@ def plants():
             flash(f'Found {form.search.data}', 'info')
             return render_template("plants.html", title="Plants database", form=form, output_json=output_json)
     return render_template("plants.html", title="Plants database", form=form)
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message(subject='Pyplant - Password Request Reset', sender='noreply@pyplant.io', recipients=[user.email])
+    msg.body = f'''Visit the following link to reset your password:
+{url_for('reset_token', token=token, _external=True)}
+
+This token will expire in 30 minutes.
+'''
+    mail.send(msg)
+
+@app.route("/reset_request", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if not user:
+            flash("If the email exist in the database, you will receive token.", "info")
+            return redirect(url_for('login'))
+        send_reset_email(user)
+        flash("Email with instructions has been sent", "info")
+        return redirect(url_for("login"))
+    return render_template("reset_request.html", title="Reset Password", form=form)
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    user = User.verify_reset_token(token)
+    if not user:
+        flash("Invalid or expired token.", "warning")
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash(f'Password has been updated. You can now login!', 'success')
+        return redirect(url_for('login'))
+    return render_template("reset_password.html", title="Reset Password", form=form)
