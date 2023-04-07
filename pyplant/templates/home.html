@@ -1,22 +1,21 @@
 {% extends "layout.html" %} {% block content %}
 <div>
-  <a href="{{ url_for('new_pot') }}" type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
+  <a href="{{ url_for('new_pot') }}" type="button" class="btn btn-lg sync-btn"><i
       class="fa-solid fa-glass-water-droplet"></i> Add Pot</a></i>
-  <a href="{{ url_for('home') }}" type="button" class="btn btn-outline-secondary btn-lg sync-btn"><i
+  <a href="{{ url_for('home') }}" type="button" class="btn btn-lg sync-btn"><i
       class="fa-solid fa-rotate"></i> Sync</a></i>
 </div>
-{% if pots.first() %}
 <section class="pots-holder">
   <div class="container">
     <div class="row">
-
-      {% for pot in pots %}
+      {% for pot in pots.items %}
       <div class="col-md-6">
         <section class="map-cont mobile-card-size plant-card">
           <div class="container">
             <div class="row">
               <div class="col-md-6 mt-4">
-                <img src="static/pot_img/{{ pot.pot_image }}" alt="" class="rounded mx-auto d-block map img-fluid plant-img" />
+                <img src="static/pot_img/{{ pot.pot_image }}" alt=""
+                  class="rounded mx-auto d-block map img-fluid plant-img" />
               </div>
               <div class="col-md-6 mt-4">
                 <h3><a class="pot-heading" href="{{ url_for('pot', pot_id=pot.id) }}">{{ pot.name }} </a></h3>
@@ -27,8 +26,22 @@
         </section>
       </div>
       {% endfor %}
+      {% for page_num in pots.iter_pages() %}
+        {% if page_num %}
+          <div>
+            {% if pots.page == page_num %}
+              <a class="btn btn-sm mt-4 mr-1 act-pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+              page_num }}</a>
+            {% else %}
+              <a class="btn btn-sm mt-4 mr-1 pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+                page_num }}</a>
+            {% endif %}
+          </div>
+        {% else %}
+          ...
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 </section>
-{% else %} <h1>no</h1>{% endif %}
 {% endblock content %}

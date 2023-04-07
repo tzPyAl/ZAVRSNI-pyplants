@@ -17,7 +17,8 @@ import glob
 @app.route("/home")
 @login_required
 def home():
-    pots = Pots.query.filter_by(owner=current_user)
+    page = request.args.get('page', 1, type=int)
+    pots = Pots.query.filter_by(owner=current_user).paginate(page=page, per_page=6)
     return render_template('home.html', pots=pots)
 
 
