@@ -21,10 +21,18 @@ class User(db.Model, UserMixin):
         s = TimedSerializer(app.config['SECRET_KEY'], 'confirmation')
         return s.dumps({'user_id': self.id})
     
-    def verify_reset_token(self, token, max_age=1800):
+    @staticmethod
+    def verify_reset_token(token, max_age=1800):
         s = TimedSerializer(app.config['SECRET_KEY'], 'confirmation')
-        user_id = s.loads(token, max_age=max_age)
-        return self.id if user_id == self.id else None
+        try:
+            user_id = s.loads(token, max_age=max_age)
+        except:
+            return None
+        else:
+            return User.query.get(user_id['user_id'])
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
     def __repr__(self): # how our Object is printed, when we printed it out
         return f"User('{self.id}', '{self.username}', '{self.email}')"

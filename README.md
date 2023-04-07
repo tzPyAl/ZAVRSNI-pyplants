@@ -17,15 +17,16 @@
 - current weather and pollution from `OpenWeatherMap API`
 - data fetched by geolocation from IP (Endpoint data from ip) or by hardcoded city name
 
-## GUI 🚧
+## GUI ✅
 
 - `Flask`, `jinja2`, `FlaskForm`, `Pillow`, `json2html`
 - `bootstrap`, `html`, `css`
 - navbar, layout, login, register
 
-### Pots 🚧
+### Pots ✅
 
 - responsive home page with add pot option
+- pagination
 
 ### Pot 🚧
 
@@ -36,19 +37,20 @@
 - pot now has tabs: basic info, weather and pollution, which consumes fetched weather data
 - CRUD
 
-### Plants
+### Plants 🚧
 
 - search scrapped plants db
 - search is posible by keyword in common_name key
 - not key sensitive
 
-### Profil 🚧
+### Profil ✅
 
 - auth, remember me
 - user has name, email, password and image
 - CRUD
 - if user changes the profile picture, old one is deleted
 - profile picture is formated to 125x125px
+- user email and password reset
 
 ## DB ✅
 
@@ -59,9 +61,7 @@
 
 ## Next step/s 🚧 🚧 🚧
 
-- paginate the home page
-- user email and password reset
-- ~~embed the scrapped data~~ prettify the scrapped data. take id and leave it in pot to connect plant and pot
+- connect plant and pot
 - deploy, custom domain, https
 - write tests
 - create ci on gh actions
