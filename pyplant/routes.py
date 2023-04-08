@@ -13,6 +13,45 @@ import json
 import glob
 
 
+light_levels = [
+    {
+        'id': 1,
+        'description': 'full sun (+21,500 lux /+2000 fc )'
+    },
+    {
+        'id': 2,
+        'description': 'strong light ( 21,500 to 3,200 lux/2000 to 300 fc)'
+    },
+    {
+        'id': 3,
+        'description': 'diffuse light ( Less than 5,300 lux / 500 fc)'
+    }
+]
+
+water_levels = [
+    {
+        'id': 1,
+        'description': 'keep moist between watering  &  must not dry between watering'
+    },
+    {
+        'id': 2,
+        'description': 'change water regularly in the cup  &  water when soil is half dry'
+    },
+    {
+        'id': 3,
+        'description': 'keep moist between watering  &  water when soil is half dry'
+    },
+    {
+        'id': 4,
+        'description': 'must dry between watering  &  water only when dry'
+    },
+    {
+        'id': 5,
+        'description': 'do not water'
+    },
+]
+
+
 @app.route("/")
 @app.route("/home")
 @login_required
@@ -135,6 +174,10 @@ def pot(pot_id):
     save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
     save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
     plant = Plant.query.get(pot.plant_id)
+    if plant:
+        light_level = [x for x in light_levels if x['id'] == plant.light_level][0]['description']
+        water_level = [x for x in water_levels if x['id'] == plant.water_level][0]['description']
+        return render_template("pot.html", title=pot.name, pot=pot, plant=plant, light_level=light_level, water_level=water_level)
     return render_template("pot.html", title=pot.name, pot=pot, plant=plant)
 
 
@@ -144,44 +187,6 @@ def read_latest_scrapped_data():
     with open(latest_scrap) as jsondata:
         data = json.load(jsondata)
     return data
-
-light_levels = [
-    {
-        'id': 1,
-        'description': 'full sun (+21,500 lux /+2000 fc )'
-    },
-    {
-        'id': 2,
-        'description': 'strong light ( 21,500 to 3,200 lux/2000 to 300 fc)'
-    },
-    {
-        'id': 3,
-        'description': 'diffuse light ( Less than 5,300 lux / 500 fc)'
-    }
-]
-
-water_levels = [
-    {
-        'id': 1,
-        'description': 'keep moist between watering  &  must not dry between watering'
-    },
-    {
-        'id': 2,
-        'description': 'change water regularly in the cup  &  water when soil is half dry'
-    },
-    {
-        'id': 3,
-        'description': 'keep moist between watering  &  water when soil is half dry'
-    },
-    {
-        'id': 4,
-        'description': 'must dry between watering  &  water only when dry'
-    },
-    {
-        'id': 5,
-        'description': 'do not water'
-    },
-]
 
 @app.route("/pots/<int:pot_id>/connect_db", methods=['GET', 'POST'])
 @login_required

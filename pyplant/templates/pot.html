@@ -47,20 +47,20 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="plant-table">Minimal temperature:</td>
+                                    <td class="plant-table">min temp.:</td>
                                     <td>&emsp;{{ plant.temp_min }}&#8451;</td>
                                 </tr>
                                 <tr>
-                                    <td class="plant-table">Maximal temperature:</td>
+                                    <td class="plant-table">MAX temp.:</td>
                                     <td>&emsp;{{ plant.temp_max }}&#8451;</td>
                                 </tr>
                                 <tr>
                                     <td class="plant-table">Light level:</td>
-                                    <td>&emsp;{{ plant.light_level }}</td>
+                                    <td>&emsp;{{ light_level.capitalize() }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="plant-table">Watering level:</td>
-                                    <td>&emsp;{{ plant.water_level }}</td>
+                                    <td class="plant-table">Water level:</td>
+                                    <td>&emsp;{{ water_level.capitalize() }}</td>
                                 </tr>
                             </tbody>
                         </table>

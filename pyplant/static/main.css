@@ -190,7 +190,7 @@ h1 {
 .plant-table {
   background-color: var(--dark-green);
   color: var(--white);
-  font-weight: 400;
+  font-size: 0.9rem;
   border: 0;
   border-bottom: 1px solid var(--white);
 }
