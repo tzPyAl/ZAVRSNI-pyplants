@@ -4,7 +4,7 @@ from scripts.endpoint_data import Endpoint
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 import email_validator
 
@@ -133,3 +133,35 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Reset Password")
+
+class PlantDBForm(FlaskForm):
+    db_id = IntegerField("Plants db ID", validators=[DataRequired()])
+    submit = SubmitField("Connect")
+
+    def validate_search(self, db_id):
+        if not db_id:
+            raise ValidationError(f'Enter the Plant db ID. Find it in Plants top navigation.')
+
+class PlantCustomForm(FlaskForm):
+    name = StringField("Enter plant name", validators=[DataRequired()])
+    temp_min = IntegerField("Enter the minimal temperature", validators=[DataRequired()])
+    temp_max = IntegerField("Enter the maximal temperature", validators=[DataRequired()])
+    light_level = IntegerField("Enter light level from 1 to 3 (1 being highest)", validators=[DataRequired()])
+    water_level = IntegerField("Enter watering level from 1 to 5 (5 means do not water at all)", validators=[DataRequired()])
+    submit = SubmitField("Connect")
+
+    def validate_name(self, name):
+        if not name:
+            raise ValidationError(f'You must assign name to the plant')
+    def validate_temp_min(self, temp_min):
+        if not temp_min:
+            raise ValidationError(f'Temperature must be a whole number')
+    def validate_temp_max(self, temp_max):
+        if not temp_max:
+            raise ValidationError(f'Temperature must be a whole number')
+    def validate_light_level(self, light_level):
+        if not light_level or light_level < 1 or light_level > 3:
+            raise ValidationError(f'Light level must be a whole number between 1 and 5')
+    def validate_water_level(self, water_level):
+        if not water_level or water_level < 1 or water_level > 5:
+            raise ValidationError(f'Light level must be a whole number between 1 and 5')

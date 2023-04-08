@@ -187,6 +187,18 @@ h1 {
   border-bottom: 2px solid var(--green);
 }
 
+.plant-table {
+  background-color: var(--dark-green);
+  color: var(--white);
+  font-weight: 400;
+  border: 0;
+  border-bottom: 1px solid var(--white);
+}
+
+.hello-plant {
+  margin-bottom: 5%;
+}
+
 @media screen and (max-width: 768px) {
   .mobile-card-size {
     min-height: 600px;

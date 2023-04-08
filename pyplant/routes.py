@@ -1,6 +1,6 @@
 from pyplant import app, db, bcrypt, mail
-from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm, SearchForm, RequestResetForm, ResetPasswordForm
-from pyplant.db_models import User, Pots
+from pyplant.wt_forms import RegistrationForm, LoginForm, UpdateProfileForm, PotForm, SearchForm, RequestResetForm, ResetPasswordForm, PlantDBForm, PlantCustomForm
+from pyplant.db_models import User, Pots, Plant
 from scripts.weather import get_weather
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
@@ -134,7 +134,80 @@ def pot(pot_id):
     pollution = '{% block pollution %}<div class="styled-table">' + convert(_pollution) + '</div>{% endblock %}'
     save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
     save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
-    return render_template("pot.html", title=pot.name, pot=pot)
+    plant = Plant.query.get(pot.plant_id)
+    return render_template("pot.html", title=pot.name, pot=pot, plant=plant)
+
+
+def read_latest_scrapped_data():
+    list_of_scrapped = glob.glob('./scrapped_data/*.json')
+    latest_scrap = max(list_of_scrapped, key=os.path.getctime) 
+    with open(latest_scrap) as jsondata:
+        data = json.load(jsondata)
+    return data
+
+light_levels = [
+    {
+        'id': 1,
+        'description': 'full sun (+21,500 lux /+2000 fc )'
+    },
+    {
+        'id': 2,
+        'description': 'strong light ( 21,500 to 3,200 lux/2000 to 300 fc)'
+    },
+    {
+        'id': 3,
+        'description': 'diffuse light ( Less than 5,300 lux / 500 fc)'
+    }
+]
+
+water_levels = [
+    {
+        'id': 1,
+        'description': 'keep moist between watering  &  must not dry between watering'
+    },
+    {
+        'id': 2,
+        'description': 'change water regularly in the cup  &  water when soil is half dry'
+    },
+    {
+        'id': 3,
+        'description': 'keep moist between watering  &  water when soil is half dry'
+    },
+    {
+        'id': 4,
+        'description': 'must dry between watering  &  water only when dry'
+    },
+    {
+        'id': 5,
+        'description': 'do not water'
+    },
+]
+
+@app.route("/pots/<int:pot_id>/connect_db", methods=['GET', 'POST'])
+@login_required
+def connect_plant_db(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    if pot.owner != current_user:
+        abort(403)
+    form = PlantDBForm()
+    if form.validate_on_submit():
+        data = read_latest_scrapped_data()
+        if form.db_id.data >= len(data):
+            flash("ID doesn't exist in DB. Look for Plants in the top navigation.", 'danger')
+            return redirect(url_for('connect_plant_db', pot_id=pot.id))
+        else:
+            name = data[form.db_id.data]['common_name']
+            temp_min = data[form.db_id.data]['temperature_min._(c\u00b0)']
+            temp_max = data[form.db_id.data]['temperature_max._(c\u00b0)']
+            light_level = [x for x in light_levels if str(data[form.db_id.data]['light_ideal']) in x['description']][0]['id']
+            water_level = [x for x in water_levels if str(data[form.db_id.data]['watering']) in x['description']][0]['id']
+            plant = Plant(name=name, temp_min=temp_min, temp_max=temp_max, light_level=light_level, water_level=water_level, pots_id=[pot])
+            db.session.add(plant)
+            db.session.commit()
+            flash('Pot has been updated.', 'success')
+            return redirect(url_for("pot", pot_id=pot.id))
+#    elif request.method == "GET":
+    return render_template("create_plant_db.html", title="Connect plant from db to pot", form=form)
 
 
 @app.route("/pots/<int:pot_id>/update", methods=['GET', 'POST'])
@@ -190,10 +263,7 @@ def plants():
     show_plant = False
     form = SearchForm()
     if form.validate_on_submit():
-        list_of_scrapped = glob.glob('./scrapped_data/*.json')
-        latest_scrap = max(list_of_scrapped, key=os.path.getctime) 
-        with open(latest_scrap) as jsondata:
-            data = json.load(jsondata)
+        data = read_latest_scrapped_data()
         output_dict = [x for x in data if form.search.data.lower() in x['common_name']]
         output_json = json.dumps(output_dict)
         if output_json == '[]':

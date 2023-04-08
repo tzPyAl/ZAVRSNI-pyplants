@@ -37,7 +37,35 @@
                         <p class="pot-report">LOCATION: {{ pot.location }}</p>
                     </div>
                     <div class="tab-pane fade" id="plant" role="tabpanel" aria-labelledby="plant">
-                        <p>plant holder</p>
+                        {% if not pot.plant_id %}
+                        <p class="mt-4 mb-4">No plants connected. Use form to connect plant or create manual settings.
+                        </p>
+                        <a class="btn btn-secondary" href="{{ url_for('connect_plant_db', pot_id=pot.id) }}">Connect
+                            from db</a>
+                        {% else %}
+                        <h6 class="mt-5 hello-plant">{{ plant.name.capitalize() }}</h6>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="plant-table">Minimal temperature:</td>
+                                    <td>&emsp;{{ plant.temp_min }}&#8451;</td>
+                                </tr>
+                                <tr>
+                                    <td class="plant-table">Maximal temperature:</td>
+                                    <td>&emsp;{{ plant.temp_max }}&#8451;</td>
+                                </tr>
+                                <tr>
+                                    <td class="plant-table">Light level:</td>
+                                    <td>&emsp;{{ plant.light_level }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="plant-table">Watering level:</td>
+                                    <td>&emsp;{{ plant.water_level }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- DivTable.com -->
+                        {% endif %}
                     </div>
                     <div class="tab-pane fade" id="weather" role="tabpanel" aria-labelledby="weather">
                         {% include "weather.html" %}

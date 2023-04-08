@@ -8,7 +8,7 @@ import json
 
 id = 0
 
-def scrapper(start=1, end=2): # todo: could make this dynamic, to loop until 404
+def scrapper(start=1, end=365): # todo: could make this dynamic, to loop until 404
     plants = []
     for id in range(start, end+1):
         if id < 10 : id = "0" + str(id)
@@ -46,8 +46,8 @@ def _soup_tropicopia_house_plant(html_content):
     global id
     soup = BeautifulSoup(html_content, "html.parser")
     abstract = soup.find_all('p', attrs={'class' : 'ar12D'})
-    plant = {'id':id}
     id += 1
+    plant = {'id':id}
     key_bool = True
     key = ""
     value = ""

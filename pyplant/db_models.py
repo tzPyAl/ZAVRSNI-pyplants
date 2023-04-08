@@ -32,10 +32,7 @@ class User(db.Model, UserMixin):
             return User.query.get(user_id['user_id'])
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-
-    def __repr__(self): # how our Object is printed, when we printed it out
-        return f"User('{self.id}', '{self.username}', '{self.email}')"
+        return f"User('{self.id}', '{self.username}', '{self.email}', '{self.image_file}'), '{self.pots}')"
     
 class Pots(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -47,9 +44,21 @@ class Pots(db.Model):
     lon = db.Column(db.String(20), nullable=False)
     lat = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    # add plant id
+    plant_id = db.Column(db.Integer, db.ForeignKey("plant.id"))
 
     def __repr__(self): # how our Object is printed, when we printed it out
-        return f"Pots('{self.name}', '{self.location}', '{self.pot_image}', '{self.status}', '{self.user_id}', '{self.data_created}')"
+        return f"Pots('{self.id}', '{self.name}', '{self.location}', '{self.pot_image}', '{self.status}', '{self.user_id}', '{self.plant_id}', '{self.data_created}')"
+    
+class Plant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False)
+    temp_min = db.Column(db.Integer, nullable=False)
+    temp_max = db.Column(db.Integer, nullable=False)
+    light_level = db.Column(db.Integer, nullable=False)
+    water_level = db.Column(db.Integer, nullable=False)
+    pots_id = db.relationship("Pots", backref="plant", lazy=True) # lazy - load dana in one go
+
+    def __repr__(self): # how our Object is printed, when we printed it out
+        return f"Pots('{self.id}', '{self.name}', '{self.temp_min}', '{self.temp_max}', '{self.water_level}', '{self.light_level}', '{self.pots_id}')"
     
 # clear db -> db.drop_all() db.create_all()
