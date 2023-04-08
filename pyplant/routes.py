@@ -6,7 +6,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from PIL import Image
-from json2html import *
+from json2table import convert
 import secrets
 import os
 import json
@@ -130,8 +130,8 @@ def pot(pot_id):
         abort(403)
     _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
     # create a html from json, and save in html file
-    weather = '{% block weather %}<div class="styled-table">' + json2html.convert(json=_weather) + '</div>{% endblock %}'
-    pollution = '{% block pollution %}<div class="styled-table">' + json2html.convert(json=_pollution) + '</div>{% endblock %}'
+    weather = '{% block weather %}<div class="styled-table">' + convert(_weather) + '</div>{% endblock %}'
+    pollution = '{% block pollution %}<div class="styled-table">' + convert(_pollution) + '</div>{% endblock %}'
     save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
     save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
     return render_template("pot.html", title=pot.name, pot=pot)
@@ -187,6 +187,7 @@ def delete_profile():
 @app.route("/plants", methods=['GET', 'POST'])
 @login_required
 def plants():
+    show_plant = False
     form = SearchForm()
     if form.validate_on_submit():
         list_of_scrapped = glob.glob('./scrapped_data/*.json')
@@ -196,11 +197,16 @@ def plants():
         output_dict = [x for x in data if form.search.data.lower() in x['common_name']]
         output_json = json.dumps(output_dict)
         if output_json == '[]':
-            flash('No results. Try again', 'danger')
+            flash('No results. Try again', 'warning')
         else:
+            json_object = json.loads(output_json)
+            plant_img = json_object[0]['image_url']
+            plant_table = '{% block plant %}' + convert(json_object[0]) + '{% endblock %}'
+            save_to_html(name=f'{plant_table=}'.split('=')[0], content=plant_table)
+            show_plant = True
             flash(f'Found {form.search.data}', 'info')
-            return render_template("plants.html", title="Plants database", form=form, output_json=output_json)
-    return render_template("plants.html", title="Plants database", form=form)
+            return render_template("plants.html", title="Plant found", form=form, plant_img=plant_img, show_plant=show_plant)
+    return render_template("plants.html", title="Plants database", form=form, show_plant=show_plant)
 
 
 def send_reset_email(user):

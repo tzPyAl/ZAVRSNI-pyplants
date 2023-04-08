@@ -22,9 +22,18 @@
     </div>
   </form>
 </div>
-<div>
-  {% if output_json %}
-  <p>{{ output_json }}</p>
-  {% endif %}
-</div>
-{% endblock content %}
+
+{% if show_plant %}
+<section class="map-cont">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 styled-table">
+        <div class="styled-table">{% include "plant_table.html" %}</div>
+      </div>
+      <div class="col-md-6">
+        <img class="plant-img" src=" {{ plant_img }}" />
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %} {% endblock content %}

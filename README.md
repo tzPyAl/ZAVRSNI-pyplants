@@ -37,11 +37,12 @@
 - pot now has tabs: basic info, weather and pollution, which consumes fetched weather data
 - CRUD
 
-### Plants 🚧
+### Plants ✅
 
 - search scrapped plants db
 - search is posible by keyword in common_name key
 - not key sensitive
+- responsive result of first filter match
 
 ### Profil ✅
 
