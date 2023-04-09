@@ -65,7 +65,6 @@
 
 ## Next step/s 🚧 🚧 🚧
 
-- create alarms between plant meta and pot iot
 - deploy, custom domain, https
 - write tests
 - create ci on gh actions
@@ -73,5 +72,5 @@
 ## To define 🤔
 
 - IoT via API. create one or use free.
+- create alarms between plant meta and pot iot -> pots hardcode statuses, and show status content and icon
 - data visualization
-- pots hardcode statuses, and show status content and icon :!: this should be redefined.

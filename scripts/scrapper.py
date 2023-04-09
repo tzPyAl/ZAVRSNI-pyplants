@@ -58,7 +58,7 @@ def _soup_tropicopia_house_plant(html_content):
         else:
             if cleared_tag.find(":") > 0: # provjeravamo da li postoji value. ako ima ':' onda je key, pogledaj predhodni komentar
                 key = cleared_tag[:-2].replace(" ","_") # spremi za iduci key, ali nemoj ga gledat. sto znaci da je iduci cleared_tag moguci value
-                cleared_tag = None
+                cleared_tag = "None"
                 key_bool = not key_bool
             value = cleared_tag
             #logger.DEBUG("Found key, writing {key}: {value} to plant", key=key, value=value)
