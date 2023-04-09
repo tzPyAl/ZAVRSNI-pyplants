@@ -38,11 +38,16 @@
                     </div>
                     <div class="tab-pane fade" id="plant" role="tabpanel" aria-labelledby="plant">
                         {% if not pot.plant_id %}
-                        <p class="mt-4 mb-4">No plants connected. Use form to connect plant or create manual settings.
+                        <p class="">No plants connected. Use form to connect plant or create manual settings.
                         </p>
-                        <a class="btn btn-secondary" href="{{ url_for('connect_plant_db', pot_id=pot.id) }}">Connect
-                            from db</a>
+                        <div class="=mt-4 mb-4">
+                            <a class="btn btn-secondary" href="{{ url_for('edit_plant', pot_id=pot.id) }}">Manually add plant</a>
+                            <a class="btn btn-secondary" href="{{ url_for('connect_plant_db', pot_id=pot.id) }}">Connect from db</a>
+                        </div>
                         {% else %}
+                        <div class="=mt-4 mb-4">
+                            <a class="btn btn-secondary" href="{{ url_for('update_plant', pot_id=pot.id) }}">Edit plant</a>
+                        </div>
                         <h6 class="mt-5 hello-plant">{{ plant.name.capitalize() }}</h6>
                         <table>
                             <tbody>

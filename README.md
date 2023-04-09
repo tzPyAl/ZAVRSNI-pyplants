@@ -36,6 +36,9 @@
 - when we confirm the city, we extract lon/lat for weather data
 - pot now has tabs: basic info, weather and pollution, which consumes fetched weather data
 - CRUD
+- you can connect plant to pot. idea is to know which plant is in the pot, so you can use plant's meta to create alarms and notifications.
+- to connect plant, you can use scrapped db, which will automaticlly fill the meta, or manually enter the plant.
+- it's possible to edit plant, but no need for delete.
 
 ### Plants ✅
 
@@ -62,13 +65,13 @@
 
 ## Next step/s 🚧 🚧 🚧
 
-- connect plant and pot
+- create alarms between plant meta and pot iot
 - deploy, custom domain, https
 - write tests
 - create ci on gh actions
 
 ## To define 🤔
 
-- local iot data
+- IoT via API. create one or use free.
 - data visualization
 - pots hardcode statuses, and show status content and icon :!: this should be redefined.

@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 import email_validator
 
 class RegistrationForm(FlaskForm):
@@ -146,8 +146,8 @@ class PlantCustomForm(FlaskForm):
     name = StringField("Enter plant name", validators=[DataRequired()])
     temp_min = IntegerField("Enter the minimal temperature", validators=[DataRequired()])
     temp_max = IntegerField("Enter the maximal temperature", validators=[DataRequired()])
-    light_level = IntegerField("Enter light level from 1 to 3 (1 being highest)", validators=[DataRequired()])
-    water_level = IntegerField("Enter watering level from 1 to 5 (5 means do not water at all)", validators=[DataRequired()])
+    light_level = IntegerField("Enter light level from 1 to 3 (1 being highest)", validators=[DataRequired(), NumberRange(min=1, max=3)])
+    water_level = IntegerField("Enter watering level from 1 to 5 (5 means do not water at all)", validators=[DataRequired(), NumberRange(min=1, max=5)])
     submit = SubmitField("Connect")
 
     def validate_name(self, name):
@@ -159,9 +159,3 @@ class PlantCustomForm(FlaskForm):
     def validate_temp_max(self, temp_max):
         if not temp_max:
             raise ValidationError(f'Temperature must be a whole number')
-    def validate_light_level(self, light_level):
-        if not light_level or light_level < 1 or light_level > 3:
-            raise ValidationError(f'Light level must be a whole number between 1 and 5')
-    def validate_water_level(self, water_level):
-        if not water_level or water_level < 1 or water_level > 5:
-            raise ValidationError(f'Light level must be a whole number between 1 and 5')

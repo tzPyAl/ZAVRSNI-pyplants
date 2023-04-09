@@ -211,8 +211,56 @@ def connect_plant_db(pot_id):
             db.session.commit()
             flash('Pot has been updated.', 'success')
             return redirect(url_for("pot", pot_id=pot.id))
-#    elif request.method == "GET":
     return render_template("create_plant_db.html", title="Connect plant from db to pot", form=form)
+
+@app.route("/pots/<int:pot_id>/edit_plant", methods=['GET', 'POST'])
+@login_required
+def edit_plant(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    if pot.owner != current_user:
+        abort(403)
+    form = PlantCustomForm()
+    if form.validate_on_submit():
+        plant = Plant(name=form.name.data, temp_min=form.temp_min.data, temp_max=form.temp_max.data, light_level=form.light_level.data, water_level=form.water_level.data, pots_id=[pot])
+        db.session.add(plant)
+        db.session.commit()
+        flash(f'Plant data has been updated', 'success')
+        return redirect(url_for('pot', pot_id=pot.id))
+    elif request.method == "GET":
+        plant = Plant.query.get(pot.plant_id)
+        if plant:
+            form.name.data = plant.name
+            form.temp_min.data = plant.temp_min
+            form.temp_max.data = plant.temp_max
+            form.light_level.data = plant.light_level
+            form.water_level.data = plant.water_level
+    return render_template("edit_plant.html", title="Manually edit connected plant", form=form)
+
+
+@app.route("/pots/<int:pot_id>/update_plant", methods=['GET', 'POST'])
+@login_required
+def update_plant(pot_id):
+    pot = Pots.query.get_or_404(pot_id)
+    plant = Plant.query.get(pot.plant_id)
+    if pot.owner != current_user:
+        abort(403)
+    form = PlantCustomForm()
+    if form.validate_on_submit():
+        plant.name = form.name.data
+        plant.temp_min = form.temp_min.data
+        plant.temp_max = form.temp_max.data
+        plant.light_level = form.light_level.data
+        plant.water_level = form.water_level.data
+        db.session.commit()
+        flash(f'Plant data has been updated', 'success')
+        return redirect(url_for('pot', pot_id=pot.id))
+    elif request.method == "GET":
+        form.name.data = plant.name
+        form.temp_min.data = plant.temp_min
+        form.temp_max.data = plant.temp_max
+        form.light_level.data = plant.light_level
+        form.water_level.data = plant.water_level
+    return render_template("edit_plant.html", title="Manually edit connected plant", form=form)
 
 
 @app.route("/pots/<int:pot_id>/update", methods=['GET', 'POST'])
