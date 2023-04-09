@@ -2,8 +2,8 @@
 <div>
   <a href="{{ url_for('new_pot') }}" type="button" class="btn btn-lg sync-btn"><i
       class="fa-solid fa-glass-water-droplet"></i> Add Pot</a></i>
-  <a href="{{ url_for('home') }}" type="button" class="btn btn-lg sync-btn"><i
-      class="fa-solid fa-rotate"></i> Sync</a></i>
+  <a href="{{ url_for('home') }}" type="button" class="btn btn-lg sync-btn"><i class="fa-solid fa-rotate"></i>
+    Sync</a></i>
 </div>
 <section class="pots-holder">
   <div class="container">
@@ -27,21 +27,22 @@
       </div>
       {% endfor %}
       {% for page_num in pots.iter_pages() %}
-        {% if page_num %}
-          <div>
-            {% if pots.page == page_num %}
-              <a class="btn btn-sm mt-4 mr-1 act-pag-btn" href="{{ url_for('home', page=page_num) }}">{{
-              page_num }}</a>
-            {% else %}
-              <a class="btn btn-sm mt-4 mr-1 pag-btn" href="{{ url_for('home', page=page_num) }}">{{
-                page_num }}</a>
-            {% endif %}
-          </div>
-        {% else %}
-          ...
-        {% endif %}
-      {% endfor %}
+      {% if page_num %}
     </div>
   </div>
+
+  <div>
+    {% if pots.page == page_num %}
+    <a class="btn btn-sm mt-4 mr-1 act-pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+      page_num }}</a>
+    {% else %}
+    <a class="btn btn-sm mt-4 mr-1 pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+      page_num }}</a>
+    {% endif %}
+  </div>
+  {% else %}
+  ...
+  {% endif %}
+  {% endfor %}
 </section>
 {% endblock content %}
