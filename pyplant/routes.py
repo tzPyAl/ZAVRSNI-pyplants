@@ -168,6 +168,10 @@ def pot(pot_id):
     if pot.owner != current_user:
         abort(403)
     _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
+    # get weather icon
+    icon = _weather["weather"][0]["icon"]
+    icon_url = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+    print(f"ICOn URl : {icon_url}")
     # create a html from json, and save in html file
     weather = '{% block weather %}<div class="styled-table">' + convert(_weather) + '</div>{% endblock %}'
     pollution = '{% block pollution %}<div class="styled-table">' + convert(_pollution) + '</div>{% endblock %}'
@@ -177,8 +181,8 @@ def pot(pot_id):
     if plant:
         light_level = [x for x in light_levels if x['id'] == plant.light_level][0]['description']
         water_level = [x for x in water_levels if x['id'] == plant.water_level][0]['description']
-        return render_template("pot.html", title=pot.name, pot=pot, plant=plant, light_level=light_level, water_level=water_level)
-    return render_template("pot.html", title=pot.name, pot=pot, plant=plant)
+        return render_template("pot.html", title=pot.name, pot=pot, plant=plant, light_level=light_level, water_level=water_level, icon_url=icon_url)
+    return render_template("pot.html", title=pot.name, pot=pot, plant=plant, icon_url=icon_url)
 
 
 def read_latest_scrapped_data():
