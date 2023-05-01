@@ -28,3 +28,5 @@ def create_tables():
     db.create_all()
 
 from pyplant import routes
+from pyplant.errors.handlers import errors
+app.register_blueprint(errors)

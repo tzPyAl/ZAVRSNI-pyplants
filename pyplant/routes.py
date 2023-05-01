@@ -184,7 +184,7 @@ def pot(pot_id):
 def read_latest_scrapped_data():
     list_of_scrapped = glob.glob('./scrapped_data/*.json')
     latest_scrap = max(list_of_scrapped, key=os.path.getctime) 
-    with open(latest_scrap) as jsondata:
+    with open(latest_scrap, "r") as jsondata:
         data = json.load(jsondata)
     return data
 
@@ -317,7 +317,7 @@ def plants():
     form = SearchForm()
     if form.validate_on_submit():
         data = read_latest_scrapped_data()
-        output_dict = [x for x in data if form.search.data.lower() in x['common_name']]
+        output_dict = [x for x in data if form.search.data.lower() in x["common_name"]]
         output_json = json.dumps(output_dict)
         if output_json == '[]':
             flash('No results. Try again', 'warning')

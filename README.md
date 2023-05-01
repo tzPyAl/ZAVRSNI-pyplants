@@ -22,6 +22,7 @@
 - `Flask`, `jinja2`, `FlaskForm`, `Pillow`, `json2html`
 - `bootstrap`, `html`, `css`
 - navbar, layout, login, register
+- error pages (404, 403, 500)
 
 ### Pots ✅
 
