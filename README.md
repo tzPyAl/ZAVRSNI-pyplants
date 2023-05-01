@@ -29,7 +29,7 @@
 - responsive home page with add pot option
 - pagination
 
-### Pot 🚧
+### Pot ✅
 
 - pot has name, image, status, location, lon, lat
 - location is proposed from the ip.address, but can be manually entered
@@ -64,14 +64,13 @@
 - User model (id, username, email, password, image_file)
 - Pots models (id, name, pot_image, date_created, status, location, lon, lat, user_id)
 
+## IoT API microservice 🚧
+
+- IoT is standalone microservice. WIP (here)[https://github.com/tzPyAl/iot-be-pyplant]
+
 ## Next step/s 🚧 🚧 🚧
 
-- deploy, custom domain, https
-- write tests
-- create ci on gh actions
-
-## To define 🤔
-
-- IoT via API. create one or use free.
+- prepare and deploy IoT API
+- connect to API
 - create alarms between plant meta and pot iot -> pots hardcode statuses, and show status content and icon
 - data visualization
