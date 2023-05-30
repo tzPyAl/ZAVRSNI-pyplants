@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div>
-    <a href="{{ url_for('update_pot', pot_id=pot.id) }}" type="button"
+    <a href="{{ url_for('pots.update_pot', pot_id=pot.id) }}" type="button"
         class="btn btn-outline-secondary btn-lg sync-btn mt-5"><i class="fa-solid fa-pen"></i> Edit</a></i>
     <button type="button" class="btn btn-lg del-btn btn-danger mt-5" data-toggle="modal" data-target="#deleteModal"><i
             class="fa-solid fa-trash"></i> Delete</button></i>
@@ -42,12 +42,12 @@
                         <p class="">No plants connected. Use form to connect plant or create manual settings.
                         </p>
                         <div class="=mt-4 mb-4">
-                            <a class="btn btn-secondary" href="{{ url_for('edit_plant', pot_id=pot.id) }}">Manually add plant</a>
-                            <a class="btn btn-secondary" href="{{ url_for('connect_plant_db', pot_id=pot.id) }}">Connect from db</a>
+                            <a class="btn btn-secondary" href="{{ url_for('pots.edit_plant', pot_id=pot.id) }}">Manually add plant</a>
+                            <a class="btn btn-secondary" href="{{ url_for('pots.connect_plant_db', pot_id=pot.id) }}">Connect from db</a>
                         </div>
                         {% else %}
                         <div class="=mt-4 mb-4">
-                            <a class="btn btn-secondary" href="{{ url_for('update_plant', pot_id=pot.id) }}">Edit plant</a>
+                            <a class="btn btn-secondary" href="{{ url_for('pots.update_plant', pot_id=pot.id) }}">Edit plant</a>
                         </div>
                         <h6 class="mt-5 hello-plant">{{ plant.name.capitalize() }}</h6>
                         <table>
@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form action="{{ url_for('delete_pot', pot_id=pot.id )}}" method="POST">
+                <form action="{{ url_for('pots.delete_pot', pot_id=pot.id )}}" method="POST">
                     <input class="btn btn-danger" type="submit" value="Delete">
                 </form>
             </div>

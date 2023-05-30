@@ -1,8 +1,8 @@
 {% extends "layout.html" %} {% block content %}
 <div>
-  <a href="{{ url_for('new_pot') }}" type="button" class="btn btn-lg sync-btn mt-5"><i
+  <a href="{{ url_for('pots.new_pot') }}" type="button" class="btn btn-lg sync-btn mt-5"><i
       class="fa-solid fa-glass-water-droplet"></i> Add Pot</a></i>
-  <a href="{{ url_for('home') }}" type="button" class="btn btn-lg sync-btn mt-5"><i class="fa-solid fa-rotate"></i>
+  <a href="{{ url_for('main.home') }}" type="button" class="btn btn-lg sync-btn mt-5"><i class="fa-solid fa-rotate"></i>
     Sync</a></i>
 </div>
 <section class="pots-holder">
@@ -21,7 +21,7 @@
                   class="rounded mx-auto d-block map img-fluid plant-img" />
               </div>
               <div class="col-md-6 mt-4">
-                <h3><a class="pot-heading" href="{{ url_for('pot', pot_id=pot.id) }}">{{ pot.name }} </a></h3>
+                <h3><a class="pot-heading" href="{{ url_for('pots.pot', pot_id=pot.id) }}">{{ pot.name }} </a></h3>
                 <p>{{ pot.status }}</p>
               </div>
             </div>
@@ -36,10 +36,10 @@
 
   <div>
     {% if pots.page == page_num %}
-    <a class="btn btn-sm mt-4 mr-1 act-pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+    <a class="btn btn-sm mt-4 mr-1 act-pag-btn" href="{{ url_for('main.home', page=page_num) }}">{{
       page_num }}</a>
     {% else %}
-    <a class="btn btn-sm mt-4 mr-1 pag-btn" href="{{ url_for('home', page=page_num) }}">{{
+    <a class="btn btn-sm mt-4 mr-1 pag-btn" href="{{ url_for('main.home', page=page_num) }}">{{
       page_num }}</a>
     {% endif %}
   </div>

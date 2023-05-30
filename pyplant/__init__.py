@@ -2,31 +2,41 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from dotenv import load_dotenv
 from flask_mail import Mail
-import os
+from pyplant.config import Config
 
-load_dotenv()
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db" # relative path
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True # port 587
-#app.config['MAIL_USE_SSL'] = True # port 465
-app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER')
-app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS')
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
+
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
+login_manager.login_view = "users.login"
 login_manager.login_message_category = "info"
-mail = Mail(app)
+mail = Mail()
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
-from pyplant import routes
-from pyplant.errors.handlers import errors
-app.register_blueprint(errors)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
+
+    from pyplant.plants.routes import plants
+    from pyplant.main.routes import main
+    from pyplant.errors.handlers import errors
+    from pyplant.users.routes import users
+    from pyplant.pots.routes import pots
+    app.register_blueprint(main)
+    app.register_blueprint(plants)
+    app.register_blueprint(pots)
+    app.register_blueprint(users)
+    app.register_blueprint(errors)
+
+    return app
+
+
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
