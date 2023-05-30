@@ -18,10 +18,10 @@ def home():
 @main.route("/info")
 @login_required
 def info():
-    pass
+    return render_template('info.html')
 
 
 @main.route("/contact")
 @login_required
 def contact():
-    pass
+    return render_template('contact.html')
