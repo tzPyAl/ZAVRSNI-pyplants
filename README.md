@@ -64,6 +64,12 @@
 - User model (id, username, email, password, image_file)
 - Pots models (id, name, pot_image, date_created, status, location, lon, lat, user_id)
 
+### IoT and Data
+
+- dummy IoT generator
+- option for careless owner, will generate more reading outside the "green" scope
+- data visualization: chart + table, will show errors for readings outside the "green" scope
+
 ---
 
 ## IoT API microservice 🚧
@@ -72,7 +78,5 @@
 
 ## Next step/s 🚧 🚧 🚧
 
-- create dummy iot generators
-- connect to data
 - create alarms between plant meta and pot iot -> pots hardcode statuses, and show status content and icon
-- data visualization
+- embedded dummy generator in UI
