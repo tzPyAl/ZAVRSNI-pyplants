@@ -64,13 +64,15 @@
 - User model (id, username, email, password, image_file)
 - Pots models (id, name, pot_image, date_created, status, location, lon, lat, user_id)
 
+---
+
 ## IoT API microservice 🚧
 
 - IoT is standalone microservice. WIP (here)[https://github.com/tzPyAl/iot-be-pyplant]
 
 ## Next step/s 🚧 🚧 🚧
 
-- prepare and deploy IoT API
-- connect to API
+- create dummy iot generators
+- connect to data
 - create alarms between plant meta and pot iot -> pots hardcode statuses, and show status content and icon
 - data visualization
