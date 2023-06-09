@@ -9,9 +9,10 @@ from scripts.endpoint_data import Endpoint
 
 
 class PotForm(FlaskForm):
-    name = StringField("Pot name", validators=[DataRequired()])
-    image = FileField("Upload pot picture", validators=[
-                      FileAllowed(['jpg', 'jpeg', 'png'])])
+    name = StringField("Pot name",
+                       validators=[DataRequired()])
+    image = FileField("Upload pot picture",
+                      validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     endpoint = Endpoint()
     location = StringField("City", default=endpoint.city)
     lon = StringField("lon", default=endpoint.lon)

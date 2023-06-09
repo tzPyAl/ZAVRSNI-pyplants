@@ -25,14 +25,14 @@ class PlantDBForm(FlaskForm):
 
 class PlantCustomForm(FlaskForm):
     name = StringField("Enter plant name", validators=[DataRequired()])
-    temp_min = IntegerField(
-        "Enter the minimal temperature", validators=[DataRequired()])
-    temp_max = IntegerField(
-        "Enter the maximal temperature", validators=[DataRequired()])
-    light_level = IntegerField("Enter light level from 1 to 3 (1 being highest)", validators=[
-                               DataRequired(), NumberRange(min=1, max=3)])
-    water_level = IntegerField("Enter watering level from 1 to 5 (5 means do not water at all)", validators=[
-                               DataRequired(), NumberRange(min=1, max=5)])
+    temp_min = IntegerField("Enter the minimal temperature",
+                            validators=[DataRequired()])
+    temp_max = IntegerField("Enter the maximal temperature",
+                            validators=[DataRequired()])
+    light_level = IntegerField("Enter light level from 1 to 3 (1 being highest)",
+                               validators=[DataRequired(), NumberRange(min=1, max=3)])
+    water_level = IntegerField("Enter watering level from 1 to 5 (5 means do not water at all)",
+                               validators=[DataRequired(), NumberRange(min=1, max=5)])
     submit = SubmitField("Connect")
 
     def validate_name(self, name):

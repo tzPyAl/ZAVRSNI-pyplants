@@ -4,11 +4,12 @@ from json2table import convert
 from pyplant.main.utils import save_img, save_to_html
 from pyplant.plants.forms import PlantDBForm, PlantCustomForm
 from pyplant.pots.forms import PotForm
-from pyplant.pots.utils import read_latest_scrapped_data
-from pyplant.pots.data import light_levels, water_levels
+from pyplant.pots.utils import read_latest_scrapped_data, get_plant_status
+from pyplant.pots.data import light_levels, water_levels, plant_status
 from scripts.weather import get_weather
 from pyplant import db
 from pyplant.db_models import Pots, Plant
+
 
 pots = Blueprint("pots", __name__)
 
@@ -20,12 +21,19 @@ def new_pot():
     if form.validate_on_submit():
         if form.image.data:
             pot_img = save_img(form_image=form.image.data,
-                               save_dir="static/pot_img", size_x=375, size_y=375)
-            pot = Pots(name=form.name.data, location=form.location.data, lon=form.lon.data,
-                       lat=form.lat.data, pot_image=pot_img, owner=current_user)
+                               save_dir="static/pot_img",
+                               size_x=375, size_y=375)
+            pot = Pots(name=form.name.data,
+                       location=form.location.data,
+                       lon=form.lon.data,
+                       lat=form.lat.data,
+                       pot_image=pot_img,
+                       owner=current_user)
         else:
-            pot = Pots(name=form.name.data, location=form.location.data,
-                       lon=form.lon.data, lat=form.lat.data, owner=current_user)
+            pot = Pots(name=form.name.data,
+                       location=form.location.data,
+                       lon=form.lon.data, lat=form.lat.data,
+                       owner=current_user)
         db.session.add(pot)
         db.session.commit()
         flash(
@@ -40,26 +48,44 @@ def pot(pot_id):
     pot = Pots.query.get_or_404(pot_id)
     if pot.owner != current_user:
         abort(403)
-    _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
-    # get weather icon
-    icon = _weather["weather"][0]["icon"]
-    icon_url = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
-    print(f"ICOn URl : {icon_url}")
-    # create a html from json, and save in html file
-    weather = '{% block weather %}<div class="styled-table">' + \
-        convert(_weather) + '</div>{% endblock %}'
-    pollution = '{% block pollution %}<div class="styled-table">' + \
-        convert(_pollution) + '</div>{% endblock %}'
-    save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
-    save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
+    # _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
+    # # get weather icon
+    # icon = _weather["weather"][0]["icon"]
+    # icon_url = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+    # print(f"ICOn URl : {icon_url}")
+    # # create a html from json, and save in html file
+    # weather = '{% block weather %}<div class="styled-table">' + \
+    #     convert(_weather) + '</div>{% endblock %}'
+    # pollution = '{% block pollution %}<div class="styled-table">' + \
+    #     convert(_pollution) + '</div>{% endblock %}'
+    # save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
+    # save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
+    icon_url = ".."
     plant = Plant.query.get(pot.plant_id)
     if plant:
+        plant_status_id = get_plant_status(light_level_id=plant.light_level,
+                                           water_level_id=plant.water_level,
+                                           temp_min=plant.temp_min,
+                                           temp_max=plant.temp_max)
         light_level = [x for x in light_levels if x['id']
                        == plant.light_level][0]['description']
         water_level = [x for x in water_levels if x['id']
                        == plant.water_level][0]['description']
-        return render_template("pot.html", title=pot.name, pot=pot, plant=plant, light_level=light_level, water_level=water_level, icon_url=icon_url)
-    return render_template("pot.html", title=pot.name, pot=pot, plant=plant, icon_url=icon_url)
+        plant_status_description = plant_status[plant_status_id]
+        return render_template("pot.html",
+                               title=pot.name,
+                               pot=pot,
+                               plant=plant,
+                               light_level=light_level,
+                               water_level=water_level,
+                               icon_url=icon_url,
+                               status=plant_status_description,
+                               status_id=str(plant_status_id))
+    return render_template("pot.html",
+                           title=pot.name,
+                           pot=pot,
+                           plant=plant,
+                           icon_url=icon_url)
 
 
 @pots.route("/pots/<int:pot_id>/connect_db", methods=['GET', 'POST'])
@@ -83,8 +109,12 @@ def connect_plant_db(pot_id):
                 data[form.db_id.data]['light_ideal']) in x['description']][0]['id']
             water_level = [x for x in water_levels if str(
                 data[form.db_id.data]['watering']) in x['description']][0]['id']
-            plant = Plant(name=name, temp_min=temp_min, temp_max=temp_max,
-                          light_level=light_level, water_level=water_level, pots_id=[pot])
+            plant = Plant(name=name,
+                          temp_min=temp_min,
+                          temp_max=temp_max,
+                          light_level=light_level,
+                          water_level=water_level,
+                          pots_id=[pot])
             db.session.add(plant)
             db.session.commit()
             flash('Pot has been updated.', 'success')
@@ -100,8 +130,12 @@ def edit_plant(pot_id):
         abort(403)
     form = PlantCustomForm()
     if form.validate_on_submit():
-        plant = Plant(name=form.name.data, temp_min=form.temp_min.data, temp_max=form.temp_max.data,
-                      light_level=form.light_level.data, water_level=form.water_level.data, pots_id=[pot])
+        plant = Plant(name=form.name.data,
+                      temp_min=form.temp_min.data,
+                      temp_max=form.temp_max.data,
+                      light_level=form.light_level.data,
+                      water_level=form.water_level.data,
+                      pots_id=[pot])
         db.session.add(plant)
         db.session.commit()
         flash(f'Plant data has been updated', 'success')

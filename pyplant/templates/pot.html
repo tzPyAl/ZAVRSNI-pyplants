@@ -33,8 +33,9 @@
                 <!-- Tabs content -->
                 <div class="tab-content" id="tabs-content">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home">
+                        <img src=" {{ url_for('static', filename='status_icon/' + status_id + '.png') }}" />
                         <img src="{{ icon_url }}" alt="weather icon">
-                        <p class="mt-4">STATUS: {{ pot.status }}</p>
+                        <p class="mt-4">STATUS: {{ status }}</p>
                         <p class="pot-report">LOCATION: {{ pot.location }}</p>
                     </div>
                     <div class="tab-pane fade" id="plant" role="tabpanel" aria-labelledby="plant">

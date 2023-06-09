@@ -25,9 +25,16 @@ def plant():
             plant_img = json_object[0]['image_url']
             plant_table = '{% block plant %}' + \
                 convert(json_object[0]) + '{% endblock %}'
-            save_to_html(name=f'{plant_table=}'.split('=')
-                         [0], content=plant_table)
+            save_to_html(name=f'{plant_table=}'.split('=')[0],
+                         content=plant_table)
             show_plant = True
             flash(f'Found {form.search.data}', 'info')
-            return render_template("plants.html", title="Plant found", form=form, plant_img=plant_img, show_plant=show_plant)
-    return render_template("plants.html", title="Plants database", form=form, show_plant=show_plant)
+            return render_template("plants.html",
+                                   title="Plant found",
+                                   form=form,
+                                   plant_img=plant_img,
+                                   show_plant=show_plant)
+    return render_template("plants.html",
+                           title="Plants database",
+                           form=form,
+                           show_plant=show_plant)
