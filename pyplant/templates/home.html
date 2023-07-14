@@ -22,7 +22,8 @@
               </div>
               <div class="col-md-6 mt-4">
                 <h3><a class="pot-heading" href="{{ url_for('pots.pot', pot_id=pot.id) }}">{{ pot.name }} </a></h3>
-                <p>{{ pot.status }}</p>
+                <img src=" {{ url_for('static', filename='status_icon/' + pot.status|string + '.png') }}" width="40" height="40" />
+                <p>{{ pot.location }}</p>
               </div>
             </div>
           </div>

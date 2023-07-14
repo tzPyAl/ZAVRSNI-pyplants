@@ -48,19 +48,18 @@ def pot(pot_id):
     pot = Pots.query.get_or_404(pot_id)
     if pot.owner != current_user:
         abort(403)
-    # _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
-    # # get weather icon
-    # icon = _weather["weather"][0]["icon"]
-    # icon_url = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
-    # print(f"ICOn URl : {icon_url}")
-    # # create a html from json, and save in html file
-    # weather = '{% block weather %}<div class="styled-table">' + \
-    #     convert(_weather) + '</div>{% endblock %}'
-    # pollution = '{% block pollution %}<div class="styled-table">' + \
-    #     convert(_pollution) + '</div>{% endblock %}'
-    # save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
-    # save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
-    icon_url = ".."
+    _weather, _pollution = get_weather(lon=pot.lon, lat=pot.lat)
+    # get weather icon
+    icon = _weather["weather"][0]["icon"]
+    icon_url = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+    print(f"ICOn URl : {icon_url}")
+    # create a html from json, and save in html file
+    weather = '{% block weather %}<div class="styled-table">' + \
+        convert(_weather) + '</div>{% endblock %}'
+    pollution = '{% block pollution %}<div class="styled-table">' + \
+        convert(_pollution) + '</div>{% endblock %}'
+    save_to_html(name=f'{weather=}'.split('=')[0], content=weather)
+    save_to_html(name=f'{pollution=}'.split('=')[0], content=pollution)
     plant = Plant.query.get(pot.plant_id)
     if plant:
         plant_status_id = get_plant_status(light_level_id=plant.light_level,
@@ -72,6 +71,9 @@ def pot(pot_id):
         water_level = [x for x in water_levels if x['id']
                        == plant.water_level][0]['description']
         plant_status_description = plant_status[plant_status_id]
+        # update pot.status
+        pot.status = plant_status_id
+        db.session.commit()
         return render_template("pot.html",
                                title=pot.name,
                                pot=pot,

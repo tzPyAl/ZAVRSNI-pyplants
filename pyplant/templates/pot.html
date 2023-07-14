@@ -33,9 +33,15 @@
                 <!-- Tabs content -->
                 <div class="tab-content" id="tabs-content">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home">
-                        <img src=" {{ url_for('static', filename='status_icon/' + status_id + '.png') }}" />
+                        <h6 class="mt-4">PyPlant pot data</h6>
+                        {% if status %}
+                        <img src=" {{ url_for('static', filename='status_icon/' + status_id + '.png') }}" width="80" height="80" />
+                        <p class="mt-2">STATUS: {{ status }}</p>
+                        {% else %}
+                        <p class="mt-2">Connect plant to see microdata. Check 'Plant' tab</p>
+                        {% endif %}
+                        <h6 class="mt-4">Macro location data</h6>
                         <img src="{{ icon_url }}" alt="weather icon">
-                        <p class="mt-4">STATUS: {{ status }}</p>
                         <p class="pot-report">LOCATION: {{ pot.location }}</p>
                     </div>
                     <div class="tab-pane fade" id="plant" role="tabpanel" aria-labelledby="plant">
@@ -47,7 +53,7 @@
                             <a class="btn btn-secondary" href="{{ url_for('pots.connect_plant_db', pot_id=pot.id) }}">Connect from db</a>
                         </div>
                         {% else %}
-                        <div class="=mt-4 mb-4">
+                        <div class="mt-2 mb-4">
                             <a class="btn btn-secondary" href="{{ url_for('pots.update_plant', pot_id=pot.id) }}">Edit plant</a>
                         </div>
                         <h6 class="mt-5 hello-plant">{{ plant.name.capitalize() }}</h6>
