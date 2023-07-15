@@ -5,6 +5,7 @@ import secrets
 import os
 import json
 import glob
+from random import randint
 
 
 def read_latest_scrapped_data():
@@ -42,3 +43,7 @@ def save_img(form_image, save_dir, size_x, size_y):
         except FileNotFoundError:
             pass  # if i find to way to fetch the old pot image filename, i can delete it here
     return img_fn
+
+
+def generate_random_status():
+    return randint(0, 8)

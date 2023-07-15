@@ -38,3 +38,11 @@ def plant():
                            title="Plants database",
                            form=form,
                            show_plant=show_plant)
+
+
+@plants.route("/plants/json")
+@login_required
+def plants_json():
+    data = read_latest_scrapped_data()
+    return render_template("plants_json.html",
+                           data=data)

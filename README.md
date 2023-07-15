@@ -26,8 +26,8 @@
 
 ### Pots ✅
 
-- responsive home page with add pot option, to nav bar, active user's pots with image, status and location
-- pagination
+- responsive home page with add pot option, top nav bar, active user's pots with image, status and location
+- pagination, hardcoded to 6 per page
 
 ### Pot ✅
 
@@ -47,6 +47,7 @@
 - search is posible by keyword in common_name key
 - not key sensitive
 - responsive result of first filter match
+- you can see full plants scrap in UI, it will just pretty print last scrapped json file
 
 ### Profil ✅
 
