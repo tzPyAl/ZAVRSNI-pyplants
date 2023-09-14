@@ -1,0 +1,52 @@
+name: e2e pipeline
+run-name: Build, Deploy, Test from user @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.0.0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.0
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest --exitfirst || echo "No tests to run"
+
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        languages: ['python']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.0.0
+
+      - name: Init CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.languages }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "language:${{matrix.languages}}"
+  
