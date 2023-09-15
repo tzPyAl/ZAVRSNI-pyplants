@@ -7,7 +7,7 @@ on:
 
 jobs:
   lint:
-    name: Lint Python Code
+    name: Lint and Auto-Format Python Code
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +23,27 @@ jobs:
       run: |
         pip install flake8 autopep8 isort bandit
 
-    - name: Auto-format code with autopep8
-      run: autopep8 autopep8 --aggressive --in-place --recursive .
+    - name: Identify changed files
+      id: changed-files
+      run: |
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep ".*\.py$" || true)
+        echo "::set-output name=files::$CHANGED_FILES"
+
+    - name: Auto-format changed code with autopep8
+      run: |
+        for file in ${{ steps.changed-files.outputs.files }}; do
+          autopep8 --aggressive --in-place "$file"
+        done
 
     - name: Sort imports with isort
       run: isort .
 
-    - name: Lint code with flake8
-      run: flake8 .
+    - name: Lint changed code with flake8
+      run: |
+        for file in ${{ steps.changed-files.outputs.files }}; do
+          flake8 --select=F "$file"
+        done
 
     - name: Run bandit security check
       run: bandit -r .
