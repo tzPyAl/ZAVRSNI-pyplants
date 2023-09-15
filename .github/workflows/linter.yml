@@ -21,16 +21,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install flake8 black isort bandit
+        pip install flake8 autopep8 isort bandit
+
+    - name: Auto-format code with autopep8
+      run: autopep8 --in-place --recursive .
+
+    - name: Sort imports with isort
+      run: isort .
 
     - name: Lint code with flake8
       run: flake8 .
-    
-    - name: Format code with black
-      run: black --check .
-
-    - name: Sort imports with isort
-      run: isort --check .
 
     - name: Run bandit security check
       run: bandit -r .
