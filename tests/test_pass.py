@@ -4,3 +4,7 @@ import pytest
 def test_pass(blink):
     print(blink)
     pass
+
+def test_fail():
+    ## 
+    assert False
