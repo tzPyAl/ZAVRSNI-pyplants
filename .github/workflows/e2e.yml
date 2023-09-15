@@ -49,4 +49,10 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "language:${{matrix.languages}}"
-  
+          
+  clean_up:
+    runs-on: ubuntu-latest
+    environment: UAT
+
+    steps:
+      - name: "Clean up {{ vars.ENV }}"
