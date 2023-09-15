@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: UAT
     steps:
-      - name: "Checkout {{ vars.ENV }}"
+      - name: Checkout ${{ vars.ENV }}
         uses: actions/checkout@v4.0.0
 
       - name: Setup Python
