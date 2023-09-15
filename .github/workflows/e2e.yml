@@ -5,10 +5,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    environment: UAT
     steps:
-      - name: Checkout
+      - name: "Checkout {{ vars.ENV }}"
         uses: actions/checkout@v4.0.0
 
       - name: Setup Python
@@ -50,9 +51,3 @@ jobs:
         with:
           category: "language:${{matrix.languages}}"
           
-  clean_up:
-    runs-on: ubuntu-latest
-    environment: UAT
-
-    steps:
-      - name: "Clean up {{ vars.ENV }}"
