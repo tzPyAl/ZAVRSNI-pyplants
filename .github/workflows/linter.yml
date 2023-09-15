@@ -24,7 +24,7 @@ jobs:
         pip install flake8 autopep8 isort bandit
 
     - name: Auto-format code with autopep8
-      run: autopep8 --in-place --recursive .
+      run: autopep8 autopep8 --aggressive --in-place --recursive .
 
     - name: Sort imports with isort
       run: isort .
